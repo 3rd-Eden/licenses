@@ -52,6 +52,18 @@ Parser.readable('test', function test(str) {
 });
 
 /**
+ * There are 1000 ways of writing that you're using an MIT module. This
+ * normalization module attempts to normalize the licenses in to one common
+ * name.
+ *
+ * @param {Array} data A list of license information that needs to be normalized.
+ * @api public
+ */
+Parser.readable('normalize', function normalize(data) {
+  return data;
+});
+
+/**
  * Find an URL in the data structure.
  *
  * @param {Object} data Data structure

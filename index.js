@@ -32,11 +32,24 @@ function parse(name, options, fn) {
         uri: url.resolve(options.registry, name),
         method: 'GET',
         json: true
-      }, function fetched(err, res, body) {
+      }, function fetched(err, res, data) {
         if (err) return next(err);
         if (res.statusCode !== 200) return next(new Error('Invalid statusCode: '+ res.statusCode));
 
-        next(err, body);
+        //
+        // With npm you can never be sure of the data structure. We want to get
+        // the latest package from the data structure so we need double, triple
+        // checks.
+        //
+        if (
+             'object' === typeof data
+          && 'dist-tags' in data
+          && 'object' === typeof data.versions
+          && 'latest' in data['dist-tags']
+          && data['dist-tags'].latest in data.versions
+        ) data = data.versions[data['dist-tags'].latest];
+
+        next(err, data);
       });
     },
 
@@ -44,16 +57,13 @@ function parse(name, options, fn) {
     // Search for the correct way of parsing out the license information.
     //
     function search(data, next) {
+      if (!options.order.length) return next();
+
       var parser, result;
 
-      async.whilst(function select() {
-        while (!result && (parser = parse.parsers[options.order.shift()])) {
-          if (parser.supported(data)) break;
-        }
-
-        return !!parser;
-      }, function does(next) {
-        if (!parser) return next();
+      async.doWhilst(function does(next) {
+        var parser = parse.parsers[options.order.shift()];
+        if (!parser.supported(data)) return next();
 
         parser.parse(data, function parsed(err, license) {
           if (err) return next(err);
@@ -61,6 +71,8 @@ function parse(name, options, fn) {
           result = license;
           next();
         });
+      }, function select() {
+        return !result && options.order.length;
       }, function done(err) {
         next(err, result);
       });

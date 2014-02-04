@@ -23,11 +23,9 @@ module.exports = require('./parser').extend({
     //
     if (!data) return next();
 
-    this.async.some(data, function some() {
-
-    }, function done(err, data) {
-      next(err);
-    });
+    // @TODO handle the edge case where people give us an URL instead of an
+    // actual license.
+    next(undefined, this.normalize(data));
   },
 
   /**
