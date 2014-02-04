@@ -15,6 +15,7 @@ function parse(name, options, fn) {
     fn = options;
     options = null;
   }
+
   options = options || {};
   options.registry = options.registry || 'http://registry.nodejitsu.com';
   options.order = options.order || ['npm', 'file', 'github'];
@@ -35,7 +36,7 @@ function parse(name, options, fn) {
         if (err) return next(err);
         if (res.statusCode !== 200) return next(new Error('Invalid statusCode: '+ res.statusCode));
 
-        next(res, body);
+        next(err, body);
       });
     },
 
@@ -46,12 +47,14 @@ function parse(name, options, fn) {
       var parser, result;
 
       async.whilst(function select() {
-        while (!result && parser = parse.parsers[options.order.shift()]) {
+        while (!result && (parser = parse.parsers[options.order.shift()])) {
           if (parser.supported(data)) break;
         }
 
         return !!parser;
       }, function does(next) {
+        if (!parser) return next();
+
         parser.parse(data, function parsed(err, license) {
           if (err) return next(err);
 
