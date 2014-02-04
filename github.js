@@ -72,8 +72,8 @@ module.exports = require('./parser').extend({
       , parts = parsed.pathname.split('/');
 
     return {
-      user: parts[0],
-      repo: parts[1]
+      user: parts[1],
+      repo: parts[2]
     };
   },
 
@@ -91,7 +91,7 @@ module.exports = require('./parser').extend({
       method: 'GET'
     }, function fetched(err, res, body) {
       if (err) return next(err);
-      if (res.statusCode !== 200) return next(new Error('Invalid status code'));
+      if (res.statusCode !== 200) return next(new Error('Invalid status code (raw)'));
 
       next(undefined, body);
     });
@@ -111,10 +111,13 @@ module.exports = require('./parser').extend({
     this.request({
       uri: 'https://api.github.com/repos/'+ github.user +'/'+ github.repo +'/contents',
       method: 'GET',
+      headers: {
+        'User-Agent': 'npm.im/licenses'
+      },
       json: true
     }, function fetched(err, res, files) {
       if (err) return next(err);
-      if (res.statusCode !== 200) return next(new Error('Invalid status code'));
+      if (res.statusCode !== 200) return next(new Error('Invalid status code (root)'));
 
       //
       // Check if we have any compatible.
