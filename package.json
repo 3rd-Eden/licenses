@@ -13,9 +13,9 @@
   "author": "Arnout Kazemier",
   "license": "MIT",
   "dependencies": {
-    "fusing": "0.0.0",
-    "async": "~0.2.10",
-    "request": "~2.33.0",
-    "natural": "~0.1.25"
+    "fusing": "0.0.x",
+    "async": "0.2.x",
+    "request": "2.33.x",
+    "natural": "0.1.x"
   }
 }
