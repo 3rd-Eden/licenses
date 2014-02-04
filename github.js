@@ -48,13 +48,31 @@ module.exports = require('./parser').extend({
     //
     if (!data) return next();
 
-    var parser = this;
+    var github = this.repo(data)
+      , parser = this
+      , license;
 
-    this.root(this.repo(data), function root(err, files) {
+    this.root(github, function root(err, files) {
+      if (err || !files || !files.length) return next(err);
+
       //
       // Fetch and parse the 'raw' content of the file so we can parse it.
       //
-      next(err);
+      parser.async.doWhilst(function does(next) {
+        var file = files.shift();
+
+        parser.raw(github, file.name, function raw(err, data) {
+          if (err) return next(err);
+
+          license = parser.test(data);
+          console.log(license);
+          next();
+        });
+      }, function select() {
+        return !license && files.length;
+      }, function done(err) {
+        next(err, parser.normalize(license));
+      });
     });
   },
 
@@ -87,7 +105,7 @@ module.exports = require('./parser').extend({
    */
   raw: function raw(github, file, next) {
     this.request({
-      uri: 'https://raw.github.com/'+ github.user +'/'+ github.repo +'/'+ file,
+      uri: 'https://raw.github.com/'+ github.user +'/'+ github.repo +'/master/'+ file,
       method: 'GET'
     }, function fetched(err, res, body) {
       if (err) return next(err);

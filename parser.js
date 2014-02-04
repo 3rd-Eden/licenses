@@ -32,23 +32,23 @@ Parser.readable('request', require('request'));
  * dealing with.
  *
  * @param {String} str
- * @returns {String}
+ * @returns {Array}
  * @api public
  */
 Parser.readable('test', function test(str) {
-  if (/\sBSD\s/.test(str)) return 'BSD';
-  if (/\sGPL\s/.test(str) || /\sGPLv2\s/.test(str)) return 'GPL';
-  if (/\sLGPL\s/.test(str)) return 'LGPL';
-  if (/\sMIT\s/.test(str) || /\s\(MIT\)\s/.test(str)) return 'MIT';
-  if (/\sApache\sLicen[cs]e\s/.test(str)) return 'Apache';
-  if (/\sMPL\s/.test(str)) return 'MPL';
+  if (/BSD/.test(str)) return ['BSD'];
+  if (/GPL/.test(str) || /GPLv2/.test(str)) return ['GPL'];
+  if (/LGPL/.test(str)) return ['LGPL'];
+  if (/MIT/.test(str) || /\(MIT\)/.test(str)) return ['MIT'];
+  if (/Apache\s?Licen[cs]e/.test(str)) return ['Apache'];
+  if (/MPL/.test(str)) return ['MPL'];
 
   //
   // Watch out we've got a bad-ass over here.
   //
-  if (/\sDO\sWHAT\sTHE\sFUCK\sYOU\sWANT\sTO\sPUBLIC\sLICEN[CS]E\s/i.test(str)
-   || /\sWTFPL\s/.test(str)
-  ) return 'WTFPL';
+  if (/DO\sWHAT\sTHE\sFUCK\sYOU\sWANT\sTO\sPUBLIC\sLICEN[CS]E/i.test(str)
+   || /WTFPL/.test(str)
+  ) return ['WTFPL'];
 });
 
 /**
