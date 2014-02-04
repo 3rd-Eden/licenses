@@ -47,7 +47,11 @@ function parse(name, options, fn) {
           && 'object' === typeof data.versions
           && 'latest' in data['dist-tags']
           && data['dist-tags'].latest in data.versions
-        ) data = data.versions[data['dist-tags'].latest];
+        ) {
+          var readme = data.readme;
+          data = data.versions[data['dist-tags'].latest];
+          data.readme = data.readme || readme;
+        }
 
         next(err, data);
       });
