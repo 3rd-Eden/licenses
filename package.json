@@ -1,0 +1,21 @@
+{
+  "name": "licenses",
+  "version": "0.0.0",
+  "description": "A small tool that detects licensing information for a given Node.js module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "licenses",
+    "license"
+  ],
+  "author": "Arnout Kazemier",
+  "license": "MIT",
+  "dependencies": {
+    "fusing": "0.0.0",
+    "async": "~0.2.10",
+    "request": "~2.33.0",
+    "natural": "~0.1.25"
+  }
+}
