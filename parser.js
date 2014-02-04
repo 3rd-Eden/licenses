@@ -1,6 +1,8 @@
 'use strict';
 
-var fuse = require('fusing');
+var natural = require('natural')
+  , fuse = require('fusing')
+  , fs = require('fs');
 
 /**
  * The base parser class where all parsers inherit from. This provides some
@@ -81,6 +83,24 @@ Parser.readable('url', function url(data, contains) {
 
   return undefined;
 });
+
+//
+// Setup and train our classifier.
+//
+var classifier = new natural.BayesClassifier();
+
+[
+  { file: 'Apache2.0.txt', as: 'Apache 2.0' },
+  { file: 'MIT.txt', as: 'MIT' }
+].forEach(function train(lesson) {
+  classifier.addDocument(
+    fs.readFileSync(__dirname +'/licenses/'+ lesson.file, 'utf-8'),
+    lesson.as
+  );
+});
+
+classifier.train();
+Parser.readable('classifier', classifier);
 
 //
 // Expose the parser.
