@@ -114,7 +114,7 @@ Parser.readable('dual', function dual(licenses) {
     Array.prototype.push.apply(licenses, license.split(/\s{0,}(?:\/|and|or|,)\s{0,}/g));
 
     return licenses;
-  }).filter(function duplicate(item, index, all) {
+  }, []).filter(function duplicate(item, index, all) {
     return all.indexOf(item) === index;
   });
 });
