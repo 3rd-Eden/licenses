@@ -139,12 +139,13 @@ Parser.readable('dual', function dual(licenses) {
   });
 });
 
-//
-// Setup and train our classifier.
-//
-var classifier = new natural.BayesClassifier();
-
-[
+/**
+ * The contents of various of license types that we can use for comparison.
+ *
+ * @type {Array}
+ * @api private
+ */
+Parser.readable('licenses', [
   { file: 'AFL2.1.txt',       as: 'AFL 2.1'       },
   { file: 'AFL3.0.txt',       as: 'AFL 3.0'       },
   { file: 'AGPL3.0.txt',      as: 'AGPL 3.0'      },
@@ -170,15 +171,53 @@ var classifier = new natural.BayesClassifier();
   { file: 'cddl1.txt',        as: 'CDDL 1.0'      },
   { file: 'nasa.txt',         as: 'NASA 1.3'      },
   { file: 'zlib.txt',         as: 'zlib/libpng'   }
-].forEach(function train(lesson) {
-  classifier.addDocument(
-    fs.readFileSync(__dirname +'/licenses/'+ lesson.file, 'utf-8'),
-    lesson.as
-  );
-});
+].map(function map(license) {
+  license.file = fs.readFileSync(__dirname +'/licenses/'+ license.file, 'utf-8');
+  license.file = license.file.split('\n').map(function clean(line) {
+    return line.trim().toLowerCase();
+  });
 
-classifier.train();
-Parser.readable('classifier', classifier);
+  return license;
+}));
+
+/**
+ * Scan the given string for occurrences of the license text. If the given
+ * percentage of matching lines is reached, we'll assume a match.
+ *
+ * @param {String} str The string that needs to have licence matching.
+ * @param {Number} percentage Percentage for accepted match.
+ * @returns {String} License name if we have a match.
+ * @api public
+ */
+Parser.readable('scan', function scan(str, percentage) {
+  percentage = percentage || 80;
+  str = str.toLowerCase();
+
+  var matches = []
+    , match;
+
+  this.licenses.forEach(function each(license) {
+    var test = {
+      total: license.files.length,
+      license: license.as,
+      percentage: 0,
+      matches: 0
+    };
+
+    license.files.forEach(function each(line) {
+      if (~str.indexOf(line)) test.matches++;
+    });
+
+    test.percentage = test.matches / test.total * 100;
+    if (test.percentage >= percentage) matches.push(test);
+  });
+
+  match = matches.sort(function sort(a, b) {
+    return a.percentage < b.percentage;
+  })[0];
+
+  if (match) return match.license;
+});
 
 //
 // Expose the parser.
