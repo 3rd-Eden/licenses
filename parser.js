@@ -90,8 +90,16 @@ Parser.readable('url', function url(data, contains) {
 var classifier = new natural.BayesClassifier();
 
 [
-  { file: 'Apache2.0.txt', as: 'Apache 2.0' },
-  { file: 'MIT.txt', as: 'MIT' }
+  { file: 'BSD-3-Clause.txt', as: 'BSD 3-Clause'  },
+  { file: 'BSD-2-Clause.txt', as: 'BSD 2-Clause'  },
+  { file: 'Apache2.0.txt',    as: 'Apache 2.0'    },
+  { file: 'LGPL-2.1.txt',     as: 'LGPL 2.1'      },
+  { file: 'LGPL-3.0.txt',     as: 'LGPL 3.0'      },
+  { file: 'GPL-3.0.txt',      as: 'GPL 3.0'       },
+  { file: 'GPL-2.0.txt',      as: 'GPL 2.0'       },
+  { file: 'EPL-1.0.txt',      as: 'EPL 1.0'       },
+  { file: 'cddl1.txt',        as: 'CDDL 1'        },
+  { file: 'MIT.txt',          as: 'MIT'           }
 ].forEach(function train(lesson) {
   classifier.addDocument(
     fs.readFileSync(__dirname +'/licenses/'+ lesson.file, 'utf-8'),
