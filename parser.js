@@ -62,6 +62,19 @@ Parser.readable('test', function test(str) {
  * @api public
  */
 Parser.readable('normalize', function normalize(data) {
+  //
+  // First we need to pass the data through our dual license checker so can
+  // figure out if the module is dual licensed as both license values needs to
+  // be normalized.
+  //
+  // 1. Direct match. Check for direct matches against our normalized license
+  //    file.
+  //
+  // 2. toLowercase. Transform the given license string and the key of
+  //    normalization to lowercase to see if it matches.
+  //
+  // 3. String distance. To see if there might have been some mistakes.
+  //
   return data;
 });
 
@@ -84,22 +97,41 @@ Parser.readable('url', function url(data, contains) {
   return undefined;
 });
 
+Parser.readable('dual', function (str) {
+  // check for / , or and, +
+});
+
 //
 // Setup and train our classifier.
 //
 var classifier = new natural.BayesClassifier();
 
 [
-  { file: 'BSD-3-Clause.txt', as: 'BSD 3-Clause'  },
-  { file: 'BSD-2-Clause.txt', as: 'BSD 2-Clause'  },
+  { file: 'AFL2.1.txt',       as: 'AFL 2.1'       },
+  { file: 'AFL3.0.txt',       as: 'AFL 3.0'       },
+  { file: 'AGPL3.0.txt',      as: 'AGPL 3.0'      },
+  { file: 'APL-1.0.txt',      as: 'APL 1.0'       },
   { file: 'Apache2.0.txt',    as: 'Apache 2.0'    },
+  { file: 'BSD-2-Clause.txt', as: 'BSD 2-Clause'  },
+  { file: 'BSD-3-Clause.txt', as: 'BSD 3-Clause'  },
+  { file: 'BSD.txt',          as: 'BSD 4-Clouse'  },
+  { file: 'BSL1.0.txt',       as: 'BSL 1.0'       },
+  { file: 'EPL-1.0.txt',      as: 'EPL 1.0'       },
+  { file: 'GPL-2.0.txt',      as: 'GPL 2.0'       },
+  { file: 'GPL-3.0.txt',      as: 'GPL 3.0'       },
+  { file: 'ISC.txt',          as: 'ISC.txt'       },
   { file: 'LGPL-2.1.txt',     as: 'LGPL 2.1'      },
   { file: 'LGPL-3.0.txt',     as: 'LGPL 3.0'      },
-  { file: 'GPL-3.0.txt',      as: 'GPL 3.0'       },
-  { file: 'GPL-2.0.txt',      as: 'GPL 2.0'       },
-  { file: 'EPL-1.0.txt',      as: 'EPL 1.0'       },
-  { file: 'cddl1.txt',        as: 'CDDL 1'        },
-  { file: 'MIT.txt',          as: 'MIT'           }
+  { file: 'MIT.txt',          as: 'MIT'           },
+  { file: 'MPL-1.0.txt',      as: 'MPL'           },
+  { file: 'MPL-2.0.txt',      as: 'MPL 2.0'       },
+  { file: 'Python2.txt',      as: 'Python 2.0'    },
+  { file: 'UNLICENSE.txt',    as: 'UNLICENSE'     },
+  { file: 'WTFPL.txt',        as: 'WTFPL'         },
+  { file: 'beerware.txt',     as: 'Beerware'      },
+  { file: 'cddl1.txt',        as: 'CDDL 1.0'      },
+  { file: 'nasa.txt',         as: 'NASA 1.3'      },
+  { file: 'zlib.txt',         as: 'zlib/libpng'   }
 ].forEach(function train(lesson) {
   classifier.addDocument(
     fs.readFileSync(__dirname +'/licenses/'+ lesson.file, 'utf-8'),

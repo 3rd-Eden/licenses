@@ -88,9 +88,9 @@ function parse(name, options, fn) {
 // Expose our primary parsers that we can leverage to retrieve license content.
 //
 parse.parsers = {};
-parse.parsers.github  = new(require('./github'))(exports.parsers);
-parse.parsers.file    = new(require('./file'))(exports.parsers);
-parse.parsers.npm     = new(require('./npm'))(exports.parsers);
+parse.parsers.github  = new(require('./github'))(parse.parsers);
+parse.parsers.file    = new(require('./file'))(parse.parsers);
+parse.parsers.npm     = new(require('./npm'))(parse.parsers);
 
 //
 // Expose the Parser class so we easily add new parsers through third-party if

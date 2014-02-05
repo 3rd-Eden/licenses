@@ -65,7 +65,7 @@ module.exports = require('./parser').extend({
           if (err) return next(err);
 
           license = parser.test(data);
-          console.log(license);
+          console.log(license, parser.classifier.classify(data));
           next();
         });
       }, function select() {
