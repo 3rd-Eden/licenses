@@ -63,6 +63,8 @@ Parser.readable('test', function test(str) {
  * @api public
  */
 Parser.readable('normalize', function normalize(data) {
+  if (!data) return data;
+
   //
   // First we need to pass the data through our dual license checker so can
   // figure out if the module is dual licensed as both license values needs to
@@ -122,6 +124,8 @@ Parser.readable('url', function url(data, contains) {
  */
 Parser.readable('dual', function dual(licenses) {
   var licensing = [];
+
+  if (!licenses) return [];
 
   return licenses.reduce(function reduce(licenses, license) {
     license = (license || '').trim();
