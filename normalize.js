@@ -46,7 +46,7 @@ var license = {
 // your license type in so many ways. By mapping this, we can create a more
 // readable format for each license type.
 //
-module.exports = {
+var normalized = {
   '"BSD"': license.BSD,
   '(Un)license': license.UNLICENSE,
   '2-clause BSD': license.BSD2,
@@ -333,8 +333,17 @@ module.exports = {
 };
 
 //
-// Ensure that we didn't create any undefined references.
+// Ensure that we didn't create any undefined references and pre-transform the
+// normalized values for a higher hit rate.
 //
-Object.keys(module.exports).forEach(function check(key) {
-  if (!module.exports[key]) throw new Error('Invalid reference for:'+ key);
+Object.keys(normalized).map(function check(key) {
+  var uppercase = key.toUpperCase();
+
+  if (!normalized[key]) throw new Error('Invalid reference for:'+ key);
+  if (!normalized[uppercase]) normalized[uppercase] = normalized[key];
 });
+
+//
+// Expose all the mapping.
+//
+module.exports = normalized;

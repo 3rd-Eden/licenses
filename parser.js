@@ -1,6 +1,7 @@
 'use strict';
 
-var natural = require('natural')
+var normalized = require('./normalize')
+  , natural = require('natural')
   , fuse = require('fusing')
   , fs = require('fs');
 
@@ -66,16 +67,22 @@ Parser.readable('normalize', function normalize(data) {
   // First we need to pass the data through our dual license checker so can
   // figure out if the module is dual licensed as both license values needs to
   // be normalized.
-  //
-  // 1. Direct match. Check for direct matches against our normalized license
-  //    file.
-  //
-  // 2. toLowercase. Transform the given license string and the key of
-  //    normalization to lowercase to see if it matches.
-  //
-  // 3. String distance. To see if there might have been some mistakes.
-  //
-  return data;
+  return this.dual(data).map(function map(license) {
+    //
+    // 1. Direct match. Check for direct matches against our normalized license
+    //    file.
+    //
+    if (license in normalized) return normalized[license];
+
+    //
+    // 2. toUpperCase. Transform the given license string and the key of
+    //    normalization to lowercase to see if it matches.
+    //
+    var transformed = license.toUpperCase();
+    if (transformed in normalized) return normalized[transformed];
+
+    return license;
+  });
 });
 
 /**
@@ -102,6 +109,13 @@ Parser.readable('url', function url(data, contains) {
  * specify them in their package.json as : MIT/GPL because the `npm init`
  * doesn't really allow dual licensing.
  *
+ * It supports the following possibilities:
+ *
+ * - MIT/GPL
+ * - MIT and GPL
+ * - MIT or GPL
+ * - MIT, GPL
+ *
  * @param {Array} licenses
  * @returns {Array} licenses
  * @api public
@@ -109,12 +123,18 @@ Parser.readable('url', function url(data, contains) {
 Parser.readable('dual', function dual(licenses) {
   var licensing = [];
 
-  // check for / , or and, +
   return licenses.reduce(function reduce(licenses, license) {
-    Array.prototype.push.apply(licenses, license.split(/\s{0,}(?:\/|and|or|,)\s{0,}/g));
+    license = (license || '').trim();
+    if (!license) return;
+
+    Array.prototype.push.apply(
+      licenses,
+      license.split(/\s{0,}(?:\/|and|or|,)\s{0,}/g)
+    );
 
     return licenses;
   }, []).filter(function duplicate(item, index, all) {
+    if (!item) return false;
     return all.indexOf(item) === index;
   });
 });
