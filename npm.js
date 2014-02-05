@@ -54,6 +54,7 @@ module.exports = require('./parser').extend({
   /**
    * Retrieve the possible locations of the license information.
    *
+   * @param {Object} data The package.json or npm package contents.
    * @returns {Array}
    * @api private
    */

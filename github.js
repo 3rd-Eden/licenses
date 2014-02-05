@@ -64,9 +64,10 @@ module.exports = require('./parser').extend({
         parser.raw(github, file.name, function raw(err, data) {
           if (err) return next(err);
 
-          license = parser.test(data);
-          console.log(license, parser.classifier.classify(data));
-          next();
+          parser.parsers.content.parse(data, function parse(err, data) {
+            license = data;
+            next(err);
+          });
         });
       }, function select() {
         return !license && files.length;

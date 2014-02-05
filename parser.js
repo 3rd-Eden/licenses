@@ -186,7 +186,7 @@ Parser.readable('licenses', [
  *
  * @param {String} str The string that needs to have licence matching.
  * @param {Number} percentage Percentage for accepted match.
- * @returns {String} License name if we have a match.
+ * @returns {Array} License name if we have a match.
  * @api public
  */
 Parser.readable('scan', function scan(str, percentage) {
@@ -198,13 +198,13 @@ Parser.readable('scan', function scan(str, percentage) {
 
   this.licenses.forEach(function each(license) {
     var test = {
-      total: license.files.length,
+      total: license.file.length,
       license: license.as,
       percentage: 0,
       matches: 0
     };
 
-    license.files.forEach(function each(line) {
+    license.file.forEach(function each(line) {
       if (~str.indexOf(line)) test.matches++;
     });
 
@@ -216,7 +216,7 @@ Parser.readable('scan', function scan(str, percentage) {
     return a.percentage < b.percentage;
   })[0];
 
-  if (match) return match.license;
+  if (match) return [match.license];
 });
 
 //

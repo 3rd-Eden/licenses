@@ -18,7 +18,7 @@ function parse(name, options, fn) {
 
   options = options || {};
   options.registry = options.registry || 'http://registry.nodejitsu.com';
-  options.order = options.order || ['npm', 'file', 'github'];
+  options.order = options.order || ['npm', 'content', 'github'];
 
   async.waterfall([
     //
@@ -88,8 +88,8 @@ function parse(name, options, fn) {
 // Expose our primary parsers that we can leverage to retrieve license content.
 //
 parse.parsers = {};
+parse.parsers.content    = new(require('./content'))(parse.parsers);
 parse.parsers.github  = new(require('./github'))(parse.parsers);
-parse.parsers.file    = new(require('./file'))(parse.parsers);
 parse.parsers.npm     = new(require('./npm'))(parse.parsers);
 
 //
