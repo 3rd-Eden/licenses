@@ -97,8 +97,26 @@ Parser.readable('url', function url(data, contains) {
   return undefined;
 });
 
-Parser.readable('dual', function (str) {
+/**
+ * Check for potential dual licensing in the given license arrays. Most people
+ * specify them in their package.json as : MIT/GPL because the `npm init`
+ * doesn't really allow dual licensing.
+ *
+ * @param {Array} licenses
+ * @returns {Array} licenses
+ * @api public
+ */
+Parser.readable('dual', function dual(licenses) {
+  var licensing = [];
+
   // check for / , or and, +
+  return licenses.reduce(function reduce(licenses, license) {
+    Array.prototype.push.apply(licenses, license.split(/\s{0,}(?:\/|and|or|,)\s{0,}/g));
+
+    return licenses;
+  }).filter(function duplicate(item, index, all) {
+    return all.indexOf(item) === index;
+  });
 });
 
 //
