@@ -24,19 +24,25 @@ module.exports = require('./parser').extend({
     // starts in the given content. Usually, we, as developers add it at the
     // bottom of our README.md files and prefix it with "LICENSE" as header.
     //
-    data.split('\n').some(function some(line, index, lines) {
-      if (/^.{0,7}\s{0,}(?:licen[cs]e[s]?|copyright).{0,2}\s{0,}$/gim.test(line.trim())) {
-        data = lines.slice(index).join('\n');
-        debug('matched %s as license header, slicing data', JSON.stringify(line));
-        return true;
-      }
+    if (data.file && /readme/i.test(data.file)) {
+      data.content.split('\n')
+        .some(function some(line, index, lines) {
+          if (
+            /^.{0,7}\s{0,}(?:licen[cs]e[s]?|copyright).{0,2}\s{0,}$/gim.test(
+              line.trim())
+          ) {
+            data.content = lines.slice(index).join('\n');
+            debug('matched %s as license header, slicing data', JSON.stringify(line));
+          return true;
+        }
 
-      return false;
-    });
+        return false;
+      });
+    }
 
-    var license = this.scan(data);
+    var license = this.scan(data.content);
     if (!license) {
-      license = this.test(data);
+      license = this.test(data.content);
 
       if (license) debug('used regexp to detect %s in content', license);
     } else {
@@ -65,7 +71,8 @@ module.exports = require('./parser').extend({
    * @param {Object} data The package.json or npm package contents.
    */
   get: function get(data) {
-    if ('string' === typeof data) return data;
-    return data.readme;
+    if ('string' === typeof data) return { content: data };
+    if (data.readme) return { content: data.readme, file: 'readme' };
+    if (data.content) return data;
   }
 });

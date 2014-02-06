@@ -16,7 +16,6 @@
     "fusing": "0.0.x",
     "async": "0.2.x",
     "request": "2.33.x",
-    "natural": "0.1.x",
     "debug": "0.7.x"
   },
   "devDependencies": {

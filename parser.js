@@ -2,7 +2,6 @@
 
 var debug = require('debug')('licenses::parser')
   , normalized = require('./normalize')
-  , natural = require('natural')
   , fuse = require('fusing')
   , fs = require('fs');
 
@@ -151,6 +150,78 @@ Parser.readable('dual', function dual(licenses) {
 });
 
 /**
+ */
+Parser.readable('tokenizer', function tokenizer(str, amount) {
+  var tokens = str.toLowerCase().split(/\W+/g).filter(Boolean);
+
+  if (!amount) return tokens.join('');
+
+  return tokens.reduce(function reduce(words, word, index) {
+    if (!reduce.index) reduce.index = 0;
+    if (!reduce.position) {
+      reduce.position = 0;
+      words.push([]);
+    }
+
+    words[reduce.index][++reduce.position] = word;
+
+    //
+    // We've reached our maximum amount of words that we allow for matching so
+    // we need to concat our collection of words in to a single string to
+    // improve matching.
+    //
+    if (reduce.position === amount || index === (tokens.length - 1)) {
+      words[reduce.index] = words[reduce.index].join('');
+      reduce.position = 0;
+      reduce.index++;
+    }
+
+    return words;
+  }, []);
+});
+
+/**
+ * Scan the given string for occurrences of the license text. If the given
+ * percentage of matching lines is reached, we'll assume a match.
+ *
+ * @param {String} str The string that needs to have licence matching.
+ * @param {Number} percentage Percentage for accepted match.
+ * @returns {Array} License name if we have a match.
+ * @api public
+ */
+Parser.readable('scan', function scan(str, percentage) {
+  percentage = percentage || 80;
+  str = this.tokenizer(str);
+
+  var matches = []
+    , match;
+
+  this.licenses.forEach(function each(license) {
+    var test = {
+      total: license.file.length,
+      license: license.as,
+      percentage: 0,
+      matches: 0
+    };
+
+    license.file.forEach(function each(line) {
+      if (str.indexOf(line) !== -1) test.matches++;
+    });
+
+    test.percentage = test.matches / test.total * 100;
+    if (test.percentage >= percentage) matches.push(test);
+
+    debug('had a %s% match for %s', test.percentage, test.license);
+  });
+
+  match = matches.sort(function sort(a, b) {
+    return a.percentage < b.percentage;
+  })[0];
+
+  if (match) return [match.license];
+});
+
+/**
  * The contents of various of license types that we can use for comparison.
  *
  * @type {Array}
@@ -183,67 +254,13 @@ Parser.readable('licenses', [
   { file: 'nasa.txt',         as: 'NASA 1.3'      },
   { file: 'zlib.txt',         as: 'zlib/libpng'   }
 ].map(function map(license) {
-  license.file = fs.readFileSync(__dirname +'/licenses/'+ license.file, 'utf-8');
-  license.file = license.file.split('\n').map(function clean(line) {
-    line = (line || '').trim().toLowerCase();
-    if (!line) return line;
-
-    var tokenizer = new natural.WordTokenizer();
-    return tokenizer.tokenize(line).join(' ');
-  }).filter(Boolean);
+  license.file = this.tokenizer(
+    fs.readFileSync(__dirname +'/licenses/'+ license.file, 'utf-8'),
+    5
+  );
 
   return license;
-}));
-
-/**
- * Scan the given string for occurrences of the license text. If the given
- * percentage of matching lines is reached, we'll assume a match.
- *
- * @param {String} str The string that needs to have licence matching.
- * @param {Number} percentage Percentage for accepted match.
- * @returns {Array} License name if we have a match.
- * @api public
- */
-Parser.readable('scan', function scan(str, percentage) {
-  percentage = percentage || 80;
-
-  var tokenizer = new natural.WordTokenizer()
-    , matches = []
-    , match;
-
-  //
-  // Prepare the string. As we have no idea about the column preference of the
-  // developer we need to concatenate the whole license in to one single line so
-  // we can have a higher hit rate for the `indexOf` check of the license lines.
-  // In addition to that, we've already `toLowerCase`'d our license file to
-  // further improve matches.
-  //
-  str = tokenizer.tokenize(str.toLowerCase()).join(' ');
-
-  this.licenses.forEach(function each(license) {
-    var test = {
-      total: license.file.length,
-      license: license.as,
-      percentage: 0,
-      matches: 0
-    };
-
-    license.file.forEach(function each(line) {
-      if (str.indexOf(line) !== -1) test.matches++;
-    });
-
-    test.percentage = test.matches / test.total * 100;
-    if (test.percentage >= percentage) matches.push(test);
-
-    debug('had a %s% match for %s', test.percentage, test.license);
-  });
-
-  match = matches.sort(function sort(a, b) {
-    return a.percentage < b.percentage;
-  })[0];
-
-  if (match) return [match.license];
-});
+}.bind(Parser.prototype)));
 
 //
 // Expose the parser.
