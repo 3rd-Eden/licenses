@@ -49,38 +49,43 @@ module.exports = require('./parser').extend({
     //
     if (!data) return next();
 
-    var github = this.repo(data)
-      , parser = this
-      , license;
+    var parser = this;
 
-    this.root(github, function root(err, files) {
-      if (err || !files || !files.length) return next(err);
+    this.exists(data, function exists(err, url) {
+      if (err || !url) return next(err);
 
-      //
-      // Fetch and parse the 'raw' content of the file so we can parse it.
-      //
-      parser.async.doWhilst(function does(next) {
-        var file = files.shift();
+      var github = parser.repo(url)
+        , license;
 
-        debug('searching %s for license information', file.name);
+      parser.root(github, function root(err, files) {
+        if (err || !files || !files.length) return next(err);
 
-        parser.raw(github, file.name, function raw(err, data) {
-          if (err) return next(err);
+        //
+        // Fetch and parse the 'raw' content of the file so we can parse it.
+        //
+        parser.async.doWhilst(function does(next) {
+          var file = files.shift();
 
-          parser.parsers.content.parse({
-            content: data,
-            file: file.name
-          }, function parse(err, data) {
-            license = data;
+          debug('searching %s for license information', file.name);
 
-            if (license) debug('extracted %s from %s', data, file.name);
-            next(err);
+          parser.raw(github, file.name, function raw(err, data) {
+            if (err) return next(err);
+
+            parser.parsers.content.parse({
+              content: data,
+              file: file.name
+            }, function parse(err, data) {
+              license = data;
+
+              if (license) debug('extracted %s from %s', data, file.name);
+              next(err);
+            });
           });
+        }, function select() {
+          return !license && files.length;
+        }, function done(err) {
+          next(err, parser.normalize(license));
         });
-      }, function select() {
-        return !license && files.length;
-      }, function done(err) {
-        next(err, parser.normalize(license));
       });
     });
   },
@@ -117,8 +122,8 @@ module.exports = require('./parser').extend({
       uri: 'https://raw.github.com/'+ github.user +'/'+ github.repo +'/master/'+ file,
       method: 'GET'
     }, function fetched(err, res, body) {
-      if (err) return next(err);
-      if (res.statusCode !== 200) return next(new Error('Invalid status code (raw)'));
+      if (err || res.statusCode === 404) return next(err);
+      if (res.statusCode !== 200) return next(new Error('Invalid status code (raw:'+ res.statusCode +')'));
 
       next(undefined, body);
     });
@@ -146,8 +151,8 @@ module.exports = require('./parser').extend({
       },
       json: true
     }, function fetched(err, res, files) {
-      if (err) return next(err);
-      if (res.statusCode !== 200) return next(new Error('Invalid status code (root)'));
+      if (err || res.statusCode === 404) return next(err);
+      if (res.statusCode !== 200) return next(new Error('Invalid status code (root:'+ res.statusCode +')'));
 
       //
       // Check if we have any compatible.
@@ -158,6 +163,33 @@ module.exports = require('./parser').extend({
 
       if (!files.length) return next();
       return next(undefined, files);
+    });
+  },
+
+  /**
+   * It's possible that a user has moved the repository to a new location.
+   * Github automatically redirects you when you access the old page. But it
+   * doesn't provide any redirection for API calls causing them to fail with
+   * 404's.
+   *
+   * In order to detect the correct repository location we need to do a HEAD
+   * check of the public github URL and use the location header as source URL
+   * when we're presented with a 301 status code.
+   *
+   *
+   * @param {String} url The possible location of the repository.
+   * @param {Function} next Continuation
+   * @api private
+   */
+  exists: function exists(url, next) {
+    var github = this.repo(url);
+
+    this.request({
+      uri: 'https://github.com/'+ github.user +'/'+ github.repo,
+      method: 'HEAD'
+    }, function fetched(err, res, data) {
+      if (err) return next(err);
+      next(undefined, res.request.href || url);
     });
   },
 

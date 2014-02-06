@@ -233,6 +233,7 @@ Parser.readable('licenses', [
   { file: 'AGPL3.0.txt',      as: 'AGPL 3.0'      },
   { file: 'APL-1.0.txt',      as: 'APL 1.0'       },
   { file: 'Apache2.0.txt',    as: 'Apache 2.0'    },
+  { file: 'Artistic2.0.txt',  as: 'Artistic 2.0'  },
   { file: 'BSD-2-Clause.txt', as: 'BSD 2-Clause'  },
   { file: 'BSD-3-Clause.txt', as: 'BSD 3-Clause'  },
   { file: 'BSD.txt',          as: 'BSD 4-Clouse'  },
