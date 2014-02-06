@@ -16,11 +16,12 @@
     "fusing": "0.0.x",
     "async": "0.2.x",
     "request": "2.33.x",
-    "natural": "0.1.x"
+    "natural": "0.1.x",
+    "debug": "0.7.x"
   },
   "devDependencies": {
-    "mocha": "~1.17.1",
-    "chai": "~1.9.0",
-    "pre-commit": "0.0.4"
+    "mocha": "1.17.x",
+    "chai": "1.9.x",
+    "pre-commit": "0.0.x"
   }
 }

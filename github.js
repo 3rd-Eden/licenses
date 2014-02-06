@@ -1,6 +1,7 @@
 'use strict';
 
-var url = require('url');
+var debug = require('debug')('licenses::github')
+  , url = require('url');
 
 /**
  * Parser for github based URL.
@@ -61,11 +62,15 @@ module.exports = require('./parser').extend({
       parser.async.doWhilst(function does(next) {
         var file = files.shift();
 
+        debug('searching %s for license information', file.name);
+
         parser.raw(github, file.name, function raw(err, data) {
           if (err) return next(err);
 
           parser.parsers.content.parse(data, function parse(err, data) {
             license = data;
+
+            if (license) debug('extracted %s from %s', data, file.name);
             next(err);
           });
         });
@@ -125,10 +130,13 @@ module.exports = require('./parser').extend({
    * @api private
    */
   root: function root(github, next) {
-    var parser = this;
+    var url = 'https://api.github.com/repos/'+ github.user +'/'+ github.repo +'/contents'
+      , parser = this;
+
+    debug('retreiving file list from %s', url);
 
     this.request({
-      uri: 'https://api.github.com/repos/'+ github.user +'/'+ github.repo +'/contents',
+      uri: url,
       method: 'GET',
       headers: {
         'User-Agent': 'npm.im/licenses'

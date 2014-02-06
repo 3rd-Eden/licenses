@@ -1,5 +1,7 @@
 'use strict';
 
+var debug = require('debug')('licenses::npm');
+
 /**
  * Parser for npm based license information.
  *
@@ -22,6 +24,8 @@ module.exports = require('./parser').extend({
     // which symbolises a failed attempt.
     //
     if (!data) return next();
+
+    debug('found %s in the package contents', data);
 
     // @TODO handle the edge case where people give us an URL instead of an
     // actual license.

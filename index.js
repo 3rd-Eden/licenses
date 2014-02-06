@@ -1,6 +1,7 @@
 'use strict';
 
-var request = require('request')
+var debug = require('debug')('licenses::parse')
+  , request = require('request')
   , async = require('async')
   , url = require('url');
 
@@ -28,6 +29,8 @@ function parse(name, options, fn) {
     function fetch(next) {
       if ('string' !== typeof name) return next(undefined, name);
 
+      debug('was given a string, retreiving package from npm : %s', options.registry);
+
       request({
         uri: url.resolve(options.registry, name),
         method: 'GET',
@@ -51,6 +54,8 @@ function parse(name, options, fn) {
           var readme = data.readme;
           data = data.versions[data['dist-tags'].latest];
           data.readme = data.readme || readme;
+
+          debug('found "dist-tags" updating data to latest version');
         }
 
         next(err, data);
@@ -66,13 +71,19 @@ function parse(name, options, fn) {
       var parser, result;
 
       async.doWhilst(function does(next) {
-        var parser = parse.parsers[options.order.shift()];
+        var name = options.order.shift()
+          , parser = parse.parsers[name];
+
         if (!parser.supported(data)) return next();
+
+        debug('attempting to extract the license information using: %s', name);
 
         parser.parse(data, function parsed(err, license) {
           if (err) return next(err);
 
           result = license;
+
+          if (result) debug('parsing with %s was successful', name);
           next();
         });
       }, function select() {

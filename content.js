@@ -1,5 +1,7 @@
 'use strict';
 
+var debug = require('debug')('licenses::content');
+
 module.exports = require('./parser').extend({
   /**
    * Parse the markdown information from the package.
@@ -22,17 +24,22 @@ module.exports = require('./parser').extend({
     // starts in the given content. Usually, we, as developers add it at the
     // bottom of our README.md files and prefix it with "LICENSE" as header.
     //
-    data.split('\n').some(function some(line, index, lines) {
-      if (/^.{0,7}\s{0,}?licen[cs]e[s]?.{0,2}\s{0,}?$/gim.test(line.trim())) {
+    data.split('\n').forEach(function some(line, index, lines) {
+      if (/^.{0,7}\s{0,}(?:licen[cs]e[s]?|copyright).{0,2}\s{0,}$/gim.test(line.trim())) {
         data = lines.slice(index).join('\n');
-        return true;
+        debug('matched %s as license header, slicing data', JSON.stringify(line));
       }
-
-      return false;
     });
 
     var license = this.scan(data);
-    if (!license) license = this.test(data);
+    if (!license) {
+      license = this.test(data);
+
+      if (license) debug('used regexp to detect %s in content', license);
+    } else {
+      debug('license file scan resulted in %s as matching license', license);
+    }
+
 
     next(undefined, this.normalize(license));
   },

@@ -1,6 +1,7 @@
 'use strict';
 
-var normalized = require('./normalize')
+var debug = require('debug')('licenses::parser')
+  , normalized = require('./normalize')
   , natural = require('natural')
   , fuse = require('fusing')
   , fs = require('fs');
@@ -74,14 +75,20 @@ Parser.readable('normalize', function normalize(data) {
     // 1. Direct match. Check for direct matches against our normalized license
     //    file.
     //
-    if (license in normalized) return normalized[license];
+    if (license in normalized) {
+      debug('normalized %s to %s using the "direct match" method', license, normalized[license]);
+      return normalized[license];
+    }
 
     //
     // 2. toUpperCase. Transform the given license string and the key of
     //    normalization to lowercase to see if it matches.
     //
     var transformed = license.toUpperCase();
-    if (transformed in normalized) return normalized[transformed];
+    if (transformed in normalized) {
+      debug('normalized %s to %s using the "transform" method', license, normalized[transformed]);
+      return normalized[transformed];
+    }
 
     return license;
   });
@@ -178,7 +185,8 @@ Parser.readable('licenses', [
 ].map(function map(license) {
   license.file = fs.readFileSync(__dirname +'/licenses/'+ license.file, 'utf-8');
   license.file = license.file.split('\n').map(function clean(line) {
-    return line.trim().toLowerCase();
+    var tokenizer = new natural.WordTokenizer();
+    return tokenizer.tokenize(line.toLowerCase()).join(' ');
   });
 
   return license;
@@ -196,6 +204,10 @@ Parser.readable('licenses', [
 Parser.readable('scan', function scan(str, percentage) {
   percentage = percentage || 80;
 
+  var tokenizer = new natural.WordTokenizer()
+    , matches = []
+    , match;
+
   //
   // Prepare the string. As we have no idea about the column preference of the
   // developer we need to concatenate the whole license in to one single line so
@@ -203,10 +215,7 @@ Parser.readable('scan', function scan(str, percentage) {
   // In addition to that, we've already `toLowerCase`'d our license file to
   // further improve matches.
   //
-  str = str.toLowerCase().split('\n').join(' ');
-
-  var matches = []
-    , match;
+  str = tokenizer.tokenize(str.toLowerCase()).join(' ');
 
   this.licenses.forEach(function each(license) {
     var test = {
@@ -222,6 +231,8 @@ Parser.readable('scan', function scan(str, percentage) {
 
     test.percentage = test.matches / test.total * 100;
     if (test.percentage >= percentage) matches.push(test);
+
+    debug('had a %s% match for %s', test.percentage, test.license);
   });
 
   match = matches.sort(function sort(a, b) {
