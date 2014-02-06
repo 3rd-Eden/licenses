@@ -24,11 +24,14 @@ module.exports = require('./parser').extend({
     // starts in the given content. Usually, we, as developers add it at the
     // bottom of our README.md files and prefix it with "LICENSE" as header.
     //
-    data.split('\n').forEach(function some(line, index, lines) {
+    data.split('\n').some(function some(line, index, lines) {
       if (/^.{0,7}\s{0,}(?:licen[cs]e[s]?|copyright).{0,2}\s{0,}$/gim.test(line.trim())) {
         data = lines.slice(index).join('\n');
         debug('matched %s as license header, slicing data', JSON.stringify(line));
+        return true;
       }
+
+      return false;
     });
 
     var license = this.scan(data);
