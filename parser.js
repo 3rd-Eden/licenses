@@ -195,7 +195,15 @@ Parser.readable('licenses', [
  */
 Parser.readable('scan', function scan(str, percentage) {
   percentage = percentage || 80;
-  str = str.toLowerCase();
+
+  //
+  // Prepare the string. As we have no idea about the column preference of the
+  // developer we need to concatenate the whole license in to one single line so
+  // we can have a higher hit rate for the `indexOf` check of the license lines.
+  // In addition to that, we've already `toLowerCase`'d our license file to
+  // further improve matches.
+  //
+  str = str.toLowerCase().split('\n').join(' ');
 
   var matches = []
     , match;
