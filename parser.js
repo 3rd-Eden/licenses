@@ -185,9 +185,12 @@ Parser.readable('licenses', [
 ].map(function map(license) {
   license.file = fs.readFileSync(__dirname +'/licenses/'+ license.file, 'utf-8');
   license.file = license.file.split('\n').map(function clean(line) {
+    line = (line || '').trim().toLowerCase();
+    if (!line) return line;
+
     var tokenizer = new natural.WordTokenizer();
-    return tokenizer.tokenize(line.toLowerCase()).join(' ');
-  });
+    return tokenizer.tokenize(line).join(' ');
+  }).filter(Boolean);
 
   return license;
 }));
@@ -226,7 +229,7 @@ Parser.readable('scan', function scan(str, percentage) {
     };
 
     license.file.forEach(function each(line) {
-      if (~str.indexOf(line)) test.matches++;
+      if (str.indexOf(line) !== -1) test.matches++;
     });
 
     test.percentage = test.matches / test.total * 100;
