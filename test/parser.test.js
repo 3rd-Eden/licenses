@@ -42,5 +42,10 @@ describe('Parser', function () {
       expect(parser.dual(['MIT , GPL']).join(':')).to.equal('MIT:GPL');
       expect(parser.dual(['MIT,GPL']).join(':')).to.equal('MIT:GPL');
     });
+
+    it('requires spaces the and or keywords', function () {
+      expect(parser.dual(['MITandGPL']).join(':')).to.equal('MITandGPL');
+      expect(parser.dual(['MITorGPL']).join(':')).to.equal('MITorGPL');
+    });
   });
 });
