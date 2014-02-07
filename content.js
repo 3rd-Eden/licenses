@@ -4,6 +4,14 @@ var debug = require('debug')('licenses::content');
 
 module.exports = require('./parser').extend({
   /**
+   * The name of this parser.
+   *
+   * @type {String}
+   * @private
+   */
+  name: 'content',
+
+  /**
    * Parse the markdown information from the package.
    *
    * @param {Object} data The package.json or npm package contents.
