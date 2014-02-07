@@ -68,11 +68,11 @@ function parse(name, options, fn) {
     function search(data, next) {
       if (!options.order.length) return next();
 
-      var parser, result;
+      var parser, result, name;
 
       async.doWhilst(function does(next) {
-        var name = options.order.shift()
-          , parser = parse.parsers[name];
+        name = options.order.shift();
+        parser = parse.parsers[name];
 
         if (!parser.supported(data)) return next();
 
@@ -89,7 +89,7 @@ function parse(name, options, fn) {
       }, function select() {
         return !result && options.order.length;
       }, function done(err) {
-        next(err, result);
+        next(err, result, name);
       });
     }
   ], fn);
