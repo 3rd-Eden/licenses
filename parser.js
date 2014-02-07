@@ -90,6 +90,9 @@ Parser.readable('normalize', function normalize(data) {
     }
 
     return license;
+  }).filter(function duplicate(item, index, all) {
+    if (!item) return false;
+    return all.indexOf(item) === index;
   });
 });
 
