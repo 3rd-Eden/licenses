@@ -139,7 +139,7 @@ Parser.readable('dual', function dual(licenses) {
 
     Array.prototype.push.apply(
       licenses,
-      license.split(/\s{0,}(?:\/|and|or|,)\s{0,}/g)
+      license.split(/\s{0,}(?:\/|\sand\s|\sor\s|,)\s{0,}/g)
     );
 
     return licenses;
