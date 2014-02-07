@@ -150,6 +150,12 @@ Parser.readable('dual', function dual(licenses) {
 });
 
 /**
+ * Tokenizer for the license files so we can figure how much lines of text from
+ * the given license matches against a string.
+ *
+ * @param {String} str The content that needs to get tokenized.
+ * @param {Number} amount The amount of words we should combine.
+ * @api private
  */
 Parser.readable('tokenizer', function tokenizer(str, amount) {
   var tokens = str.toLowerCase().split(/\W+/g).filter(Boolean);
