@@ -163,7 +163,18 @@ module.exports = require('./parser').extend({
       // Check if we have any compatible.
       //
       files = files.filter(function filter(file) {
-        return !!~parser.filenames.indexOf(file.name.toLowerCase()) && file.size > 0;
+        var name = file.name.toLowerCase();
+
+        // No size, not really useful for matching.
+        if (file.size <= 0) return false;
+
+        // Fast case, direct match.
+        if (!!~parser.filenames.indexOf(name)) return true;
+
+        // Slow case, partial match.
+        return parser.filenames.some(function some(filename) {
+          return !!~name.indexOf(filename);
+        });
       });
 
       if (!files.length) return next();
