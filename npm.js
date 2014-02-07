@@ -74,27 +74,31 @@ module.exports = require('./parser').extend({
     var parser = this
       , matches = [];
 
-    if ('string' === typeof data.license) {
-      return [data.license];
-    }
+    //
+    // Another npm oddity, it allows licenses to be specified in to different
+    // properties. Because why the fuck not?
+    //
+    ['license', 'licenses'].forEach(function each(key) {
+      if ('string' === typeof data[key]) {
+        return matches.push(data[key]);
+      }
 
-    if ('string' === typeof data.licenses) {
-      return [data.licenses];
-    }
+      if (Array.isArray(data[key])) {
+        return Array.prototype.push.apply(
+          matches,
+          data[key].map(function map(item) {
+            return parser.license(item);
+          }).filter(Boolean)
+        );
+      }
 
-    if (Array.isArray(data.licenses)) {
-      Array.prototype.push.apply(
-        matches,
-        data.licenses.map(function filter(item) {
-          return parser.license(item);
-        }).filter(Boolean)
-      );
-    } else if ('object' === typeof data.licenses) {
-      Array.prototype.push.apply(
-        matches,
-        parser.license(data)
-      );
-    }
+      if ('object' === typeof data[key] && parser.license(data[key])) {
+        return Array.prototype.push.apply(
+          matches,
+          [parser.license(data[key])]
+        );
+      }
+    });
 
     if (matches.length) return matches;
   }
