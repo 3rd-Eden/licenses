@@ -39,6 +39,11 @@ var stats = {
 //
 var parsed = {};
 
+//
+// Stores the parsed packages that we were unable to detect.
+//
+var failed = [];
+
 console.log('');
 console.log('Detecting the license of %s packages', all.length);
 if (argh.continue) console.log('Starting with package: %s', argh.continue);
@@ -50,15 +55,16 @@ console.log('');
 async.eachSeries(all, function parse(name, next) {
   if (argh.debug) console.log('Starting to parse: \x1B[36m%s\x1B[39m', name);
 
-  licenses(name, function detected(err, licenses) {
+  licenses(name, function detected(err, licenses, using) {
     if (err) return next(err);
 
     if (!licenses || !licenses.length) {
       console.log('Unable to detect license for: ', name);
+      failed.push(name);
       stats.failed++;
     } else {
-      console.log('Package \x1B[36m%s\x1B[39m is licensed under \x1B[32m%s\x1B[39m', name, licenses);
-      parsed[name] = licenses;
+      console.log('Package \x1B[36m%s\x1B[39m is licensed under \x1B[32m%s\x1B[39m using %s', name, licenses, using);
+      parsed[name] = { licenses: licenses, using: using };
       stats.detected++;
     }
 
@@ -72,6 +78,11 @@ async.eachSeries(all, function parse(name, next) {
   console.log('');
   require('fs').writeFileSync(__dirname +'/results.json', JSON.stringify(
     parsed,
+    null,
+    2
+  ));
+  require('fs').writeFileSync(__dirname +'/failed.json', JSON.stringify(
+    failed,
     null,
     2
   ));
