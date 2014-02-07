@@ -55,7 +55,10 @@ console.log('');
 async.eachSeries(all, function parse(name, next) {
   if (argh.debug) console.log('Starting to parse: \x1B[36m%s\x1B[39m', name);
 
-  licenses(name, function detected(err, licenses, using) {
+  licenses(name, {
+    order: argh.order ? argh.order.split(',') : ['npm', 'content', 'github'],
+    registry: argh.registry
+  }, function detected(err, licenses, using) {
     if (err) return next(err);
 
     if (!licenses || !licenses.length) {
