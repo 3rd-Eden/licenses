@@ -10,6 +10,14 @@ var debug = require('debug')('licenses::npm');
  */
 module.exports = require('./parser').extend({
   /**
+   * The name of this parser.
+   *
+   * @type {String}
+   * @private
+   */
+  name: 'npm',
+
+  /**
    * Parse the npm license information from the package.
    *
    * @param {Object} data The package.json or npm package contents.
@@ -81,15 +89,10 @@ module.exports = require('./parser').extend({
           return parser.license(item);
         }).filter(Boolean)
       );
-    }
-
-    if ('object' === typeof data.licenses && Object.keys(data.licenses).length) {
+    } else if ('object' === typeof data.licenses) {
       Array.prototype.push.apply(
         matches,
-        Object.keys(data.licenses).map(function map(key) {
-          if (!parser.license(data.licenses[key])) return undefined;
-          return data.licenses[key];
-        }).filter(Boolean)
+        parser.license(data)
       );
     }
 
