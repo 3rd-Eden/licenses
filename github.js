@@ -11,6 +11,14 @@ var debug = require('debug')('licenses::github')
  */
 module.exports = require('./parser').extend({
   /**
+   * The name of this parser.
+   *
+   * @type {String}
+   * @private
+   */
+  name: 'github',
+
+  /**
    * All the filenames that we're interested in from Github that can potentially
    * contain the license information.
    *
@@ -20,16 +28,13 @@ module.exports = require('./parser').extend({
    * @api private
    */
   filenames: [
-    'LICENSE',    // Uppercase version.
-    'license',    // Lowercase variant for people who don't follow the "rules"
-    'README',
-    'readme'
+    'license',
+    'readme',
   ].concat([
     'markdown', 'mdown', 'md', 'textile', 'rdoc', 'org', 'creole', 'mediawiki',
     'rst', 'asciidoc', 'adoc', 'asc', 'pod'
   ].reduce(function flatten(slim, extension) {
-    slim.push('LICENSE.'+ extension, 'license.'+ extension);
-    slim.push('README.'+ extension, 'readme.'+ extension);
+    slim.push('license.'+ extension, 'readme.'+ extension);
     return slim;
   }, [])),
 
@@ -84,7 +89,7 @@ module.exports = require('./parser').extend({
         }, function select() {
           return !license && files.length;
         }, function done(err) {
-          next(err, parser.normalize(license));
+          next(err, license);
         });
       });
     });
@@ -141,7 +146,7 @@ module.exports = require('./parser').extend({
     var url = 'https://api.github.com/repos/'+ github.user +'/'+ github.repo +'/contents'
       , parser = this;
 
-    debug('retreiving file list from %s', url);
+    debug('retrieving file list from %s', url);
 
     this.request({
       uri: url,
@@ -158,7 +163,7 @@ module.exports = require('./parser').extend({
       // Check if we have any compatible.
       //
       files = files.filter(function filter(file) {
-        return !!~parser.filenames.indexOf(file.name) && file.size > 0;
+        return !!~parser.filenames.indexOf(file.name.toLowerCase()) && file.size > 0;
       });
 
       if (!files.length) return next();
