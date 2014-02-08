@@ -107,7 +107,7 @@ Parser.readable('url', function url(data, contains) {
   if (!data) return undefined;
 
   if ('string' === typeof data && ~data.indexOf(contains)) return data;
-  if ('object' === typeof data) {
+  if ('object' === typeof data && !Array.isArray(data)) {
     if ('url' in data) return url(data.url, contains);
     if ('web' in data) return url(data.web, contains);
   }
