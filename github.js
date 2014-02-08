@@ -229,12 +229,24 @@ module.exports = require('./parser').extend({
    * @api private
    */
   get: function get(data) {
-    return (this.url(data.repository, 'github')
+    var url = this.url(data.repository, 'github')
       || this.url(data.issues, 'github')
-      || this.url(data, 'github')
-      || ''
-    ).replace('git://github.com', 'https://github.com')
-     .replace('git@github.com:', 'https://github.com/')
-     .replace('.git', '');
+      || this.url(data, 'github');
+
+    if (url) return url.replace('git://github.com', 'https://github.com')
+      .replace('git@github.com:', 'https://github.com/')
+      .replace('.git', '');
+
+    //
+    // There's an potential edge case here where people don't add their
+    // repository information to the `package.json` but they do update their
+    // README.md files with TravisCI badges. This badge image follows the same
+    // URL pattern as github URLs.
+    //
+    data= this.parsers.content.get(data);
+    if (!!data && !/travis-ci\.org\/(.*)\/(.*)\.png/mig.test(data.content)) return;
+
+    data = /travis-ci\.org\/(.*)\/(.*)\.png/gim.exec(data.content);
+    return 'https://github.com/'+ data[1] +'/'+ data[2];
   }
 });
