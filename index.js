@@ -19,7 +19,7 @@ function parse(name, options, fn) {
 
   options = options || {};
   options.registry = options.registry || 'http://registry.nodejitsu.com';
-  options.order = options.order || ['npm', 'content', 'github'];
+  options.order = options.order || ['registry', 'content', 'github'];
 
   async.waterfall([
     //
@@ -96,18 +96,21 @@ function parse(name, options, fn) {
 }
 
 //
-// Expose our primary parsers that we can leverage to retrieve license content.
-//
-parse.parsers = {};
-parse.parsers.content    = new(require('./content'))(parse.parsers);
-parse.parsers.github  = new(require('./github'))(parse.parsers);
-parse.parsers.npm     = new(require('./npm'))(parse.parsers);
-
-//
 // Expose the Parser class so we easily add new parsers through third-party if
 // needed. (Think bitbucket and other code hosting sites)
 //
-parse.Parser = require('./Parser');
+parse.Registry = require('./registry'); // Parse license out of package
+parse.Content = require('./content');   // Parse license of out file content.
+parse.Parser  = require('./Parser');    // Base parser class.
+parse.Github  = require('./github');    // Parse license info from github.
+
+//
+// Expose our primary parsers that we can leverage to retrieve license content.
+//
+parse.parsers = {};
+parse.parsers.registry  = new parse.Registry(parse.parsers);
+parse.parsers.content   = new parse.Content(parse.parsers);
+parse.parsers.github    = new parse.Github(parse.parsers);
 
 //
 // Expose the actual module.
