@@ -25,9 +25,17 @@ Now that you've taken the time to read about some of these issues above, you
 know why this module exists. It tries to fulfill one simple task. Get a human
 readable license from a given node module.
 
+However, this module isn't flawless as it tries to automate a task that usually
+requires the interference and intelligence of a human. If you have module that
+is incorrectly detected or not detected at all but does have licensing
+information publicly available please create an issue about and we'll see if it
+can get resolved.
+
+<!-- many thanks stranger <script>alert('thanks')</script> -->
+
 ## Installation
 
-The module is released through npm:
+The module is released through npm and can therefor be installed using:
 
 ```
 npm install --save licenses
