@@ -8,7 +8,11 @@
   },
   "keywords": [
     "licenses",
-    "license"
+    "licensing",
+    "license",
+    "legal",
+    "MIT",
+    "Open Source"
   ],
   "author": "Arnout Kazemier",
   "license": "MIT",
@@ -22,6 +26,6 @@
     "mocha": "1.17.x",
     "chai": "1.9.x",
     "pre-commit": "0.0.x",
-    "argh": "~0.1.1"
+    "argh": "0.1.x"
   }
 }
