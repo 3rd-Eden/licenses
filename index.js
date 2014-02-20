@@ -101,7 +101,7 @@ function parse(name, options, fn) {
 //
 parse.Registry = require('./registry'); // Parse license out of package
 parse.Content = require('./content');   // Parse license of out file content.
-parse.Parser  = require('./Parser');    // Base parser class.
+parse.Parser  = require('./parser');    // Base parser class.
 parse.Github  = require('./github');    // Parse license info from github.
 
 //
