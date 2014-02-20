@@ -103,17 +103,7 @@ Parser.readable('normalize', function normalize(data) {
  * @param {String} contains A string that the URL should contain.
  * @api public
  */
-Parser.readable('url', function url(data, contains) {
-  if (!data) return undefined;
-
-  if ('string' === typeof data && ~data.indexOf(contains)) return data;
-  if ('object' === typeof data && !Array.isArray(data)) {
-    if ('url' in data) return url(data.url, contains);
-    if ('web' in data) return url(data.web, contains);
-  }
-
-  return undefined;
-});
+Parser.readable('url', require('extract-github').url);
 
 /**
  * Check for potential dual licensing in the given license arrays. Most people
