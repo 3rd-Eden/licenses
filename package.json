@@ -17,10 +17,11 @@
   "author": "Arnout Kazemier",
   "license": "MIT",
   "dependencies": {
-    "fusing": "0.0.x",
     "async": "0.2.x",
-    "request": "2.33.x",
-    "debug": "0.7.x"
+    "debug": "0.7.x",
+    "extract-github": "0.0.x",
+    "fusing": "0.0.x",
+    "request": "2.33.x"
   },
   "devDependencies": {
     "mocha": "1.17.x",

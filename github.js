@@ -56,11 +56,10 @@ module.exports = require('./parser').extend({
 
     var parser = this;
 
-    this.exists(data, function exists(err, url) {
-      if (err || !url) return next(err);
+    this.exists(data, function exists(err, github) {
+      if (err || !github) return next(err);
 
-      var github = parser.repo(url)
-        , license;
+      var license;
 
       parser.root(github, function root(err, files) {
         if (err || !files || !files.length) return next(err);
@@ -93,25 +92,6 @@ module.exports = require('./parser').extend({
         });
       });
     });
-  },
-
-  /**
-   * Get the repository information from the given URL.
-   *
-   * @param {String} github The full URL to the github repository.
-   * @returns {Object}
-   * @api private
-   */
-  repo: function repo(github) {
-    if (!github) return {};
-
-    var parsed = url.parse(github)
-      , parts = parsed.pathname.split('/');
-
-    return {
-      user: parts[1],
-      repo: parts[2]
-    };
   },
 
   /**
@@ -197,15 +177,16 @@ module.exports = require('./parser').extend({
    * @param {Function} next Continuation
    * @api private
    */
-  exists: function exists(url, next) {
-    var github = this.repo(url);
+  exists: function exists(github, next) {
+    var parser = this;
 
     this.request({
       uri: 'https://github.com/'+ github.user +'/'+ github.repo,
       method: 'HEAD'
     }, function fetched(err, res, data) {
       if (err) return next(err);
-      next(undefined, res.request.href || url);
+
+      next(undefined, parser.get(res.request.href) || github);
     });
   },
 
@@ -228,25 +209,5 @@ module.exports = require('./parser').extend({
    * @return {String} Returns the URL or undefined.
    * @api private
    */
-  get: function get(data) {
-    var url = this.url(data.repository, 'github')
-      || this.url(data.issues, 'github')
-      || this.url(data, 'github');
-
-    if (url) return url.replace('git://github.com', 'https://github.com')
-      .replace('git@github.com:', 'https://github.com/')
-      .replace('.git', '');
-
-    //
-    // There's an potential edge case here where people don't add their
-    // repository information to the `package.json` but they do update their
-    // README.md files with TravisCI badges. This badge image follows the same
-    // URL pattern as github URLs.
-    //
-    data= this.parsers.content.get(data);
-    if (!!data && !/travis-ci\.org\/(.*)\/(.*)\.png/mig.test(data.content)) return;
-
-    data = /travis-ci\.org\/(.*)\/(.*)\.png/gim.exec(data.content);
-    return 'https://github.com/'+ data[1] +'/'+ data[2];
-  }
+  get: require('extract-github')
 });
