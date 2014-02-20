@@ -1,5 +1,7 @@
 # Licenses
 
+[![Build Status](https://travis-ci.org/3rd-Eden/licenses.png)](https://travis-ci.org/3rd-Eden/licenses)
+
 Licenses.. This is the most painful part about Open Source. There are so many
 different licenses and they all have different restrictions. In order to know
 the license footprint of your project you need to know how your modules are
