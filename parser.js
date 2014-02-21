@@ -2,6 +2,7 @@
 
 var debug = require('debug')('licenses::parser')
   , normalized = require('./normalize')
+  , GitHulk = require('githulk')
   , fuse = require('fusing')
   , fs = require('fs');
 
@@ -96,6 +97,16 @@ Parser.readable('normalize', function normalize(data) {
   });
 });
 
+var githulk = new GitHulk();
+
+/**
+ * Reference to our githulk.
+ *
+ * @type {GitHulk}
+ * @api public
+ */
+Parser.readable('githulk', githulk);
+
 /**
  * Find an URL in the data structure.
  *
@@ -103,7 +114,7 @@ Parser.readable('normalize', function normalize(data) {
  * @param {String} contains A string that the URL should contain.
  * @api public
  */
-Parser.readable('url', require('extract-github').url);
+Parser.readable('url', githulk.project.url);
 
 /**
  * Check for potential dual licensing in the given license arrays. Most people

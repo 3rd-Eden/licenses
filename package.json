@@ -19,8 +19,8 @@
   "dependencies": {
     "async": "0.2.x",
     "debug": "0.7.x",
-    "extract-github": "0.0.x",
     "fusing": "0.0.x",
+    "githulk": "0.0.x",
     "request": "2.33.x"
   },
   "devDependencies": {

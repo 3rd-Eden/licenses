@@ -20,6 +20,7 @@ function parse(name, options, fn) {
   options = options || {};
   options.registry = options.registry || 'http://registry.nodejitsu.com';
   options.order = options.order || ['registry', 'content', 'github'];
+  options.githulk = options.githulk || null;
 
   async.waterfall([
     //

@@ -21,11 +21,17 @@ module.exports = require('./parser').extend({
    * Parse the npm license information from the package.
    *
    * @param {Object} data The package.json or npm package contents.
+   * @param {Object} options Optional options.
    * @param {Function} next Continuation.
    * @api public
    */
-  parse: function parse(data, next) {
+  parse: function parse(data, options, next) {
     data = this.get(data);
+
+    if ('function' === typeof options) {
+      next = options;
+      options = {};
+    }
 
     //
     // We cannot detect a license so we call the callback without any arguments
