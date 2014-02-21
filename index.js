@@ -79,7 +79,7 @@ function parse(name, options, fn) {
 
         debug('attempting to extract the license information using: %s', name);
 
-        parser.parse(data, function parsed(err, license) {
+        parser.parse(data, options, function parsed(err, license) {
           if (err) return next(err);
 
           result = license;
