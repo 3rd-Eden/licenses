@@ -104,11 +104,13 @@ module.exports = require('./parser').extend({
 
           debug('searching %s for license information', file.name);
 
-          parser.raw(github, file.name, function raw(err, data) {
+          githulk.repository.raw(project, {
+            path: file.name
+          }, function raw(err, data) {
             if (err) return next(err);
 
             parser.parsers.content.parse({
-              content: data,
+              content: Array.isArray(data) ? data[0] : data,
               file: file.name
             }, function parse(err, data) {
               license = data;
