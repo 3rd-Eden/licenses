@@ -21,7 +21,7 @@
     "debug": "0.7.x",
     "fusing": "0.0.x",
     "githulk": "0.0.x",
-    "request": "2.33.x"
+    "npm.js": "0.0.x"
   },
   "devDependencies": {
     "mocha": "1.17.x",

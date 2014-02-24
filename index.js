@@ -1,12 +1,15 @@
 'use strict';
 
 var debug = require('debug')('licenses::parse')
+  , Registry = require('npm.js')
   , request = require('request')
   , async = require('async')
   , url = require('url');
 
 /**
- * @param {String} name The module name or the package.json contents.
+ * Fetch the thing.
+ *
+ * @param {Mixed} name The module name or the package.json contents.
  * @param {Object} options Configuration of the parse process.
  * @param {Function} fn Callback.
  * @api public
@@ -18,7 +21,7 @@ function parse(name, options, fn) {
   }
 
   options = options || {};
-  options.registry = options.registry || 'http://registry.nodejitsu.com';
+  options.registry = options.registry || new Registry();
   options.order = options.order || ['registry', 'content', 'github'];
   options.githulk = options.githulk || null;
 
@@ -29,38 +32,7 @@ function parse(name, options, fn) {
     //
     function fetch(next) {
       if ('string' !== typeof name) return next(undefined, name);
-
-      debug('was given a string, retreiving package from npm : %s', options.registry);
-
-      request({
-        uri: url.resolve(options.registry, name),
-        method: 'GET',
-        json: true
-      }, function fetched(err, res, data) {
-        if (err) return next(err);
-        if (res.statusCode !== 200) return next(new Error('Invalid statusCode: '+ res.statusCode));
-
-        //
-        // With npm you can never be sure of the data structure. We want to get
-        // the latest package from the data structure so we need double, triple
-        // checks.
-        //
-        if (
-             'object' === typeof data
-          && 'dist-tags' in data
-          && 'object' === typeof data.versions
-          && 'latest' in data['dist-tags']
-          && data['dist-tags'].latest in data.versions
-        ) {
-          var readme = data.readme;
-          data = data.versions[data['dist-tags'].latest];
-          data.readme = data.readme || readme;
-
-          debug('found "dist-tags" updating data to latest version');
-        }
-
-        next(err, data);
-      });
+      options.registry.packages.get(name, next);
     },
 
     //
