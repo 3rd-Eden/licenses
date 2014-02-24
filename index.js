@@ -2,7 +2,6 @@
 
 var debug = require('debug')('licenses::parse')
   , Registry = require('npm.js')
-  , request = require('request')
   , async = require('async')
   , url = require('url');
 
