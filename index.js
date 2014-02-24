@@ -42,6 +42,8 @@ function parse(name, options, fn) {
       if (!options.order.length) return next();
       if (Array.isArray(data)) data = data[0];
 
+      debug('searching for licensing information for %s', data.name);
+
       var parser, result, name;
 
       async.doWhilst(function does(next) {
