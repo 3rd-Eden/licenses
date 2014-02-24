@@ -29,7 +29,6 @@ fuse(Parser);
  * @api pubilc
  */
 Parser.readable('async', require('async'));
-Parser.readable('request', require('request'));
 
 /**
  * Simple regular expression based tests for figuring out which license we're

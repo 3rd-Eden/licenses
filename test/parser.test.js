@@ -11,10 +11,6 @@ describe('Parser', function () {
     expect(parser.async).to.equal(require('async'));
   });
 
-  it('exposes the `request` module', function () {
-    expect(parser.request).to.equal(require('request'));
-  });
-
   describe('#test', function () {
     it('provides basic checks of license fragments');
   });
