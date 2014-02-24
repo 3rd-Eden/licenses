@@ -20,9 +20,9 @@ function parse(name, options, fn) {
   }
 
   options = options || {};
-  options.registry = options.registry || new Registry();
-  options.order = options.order || ['registry', 'content', 'github'];
   options.githulk = options.githulk || null;
+  options.order = options.order || ['registry', 'content', 'github'];
+  options.registry = options.registry || new Registry({ githulk: options.githulk });
 
   async.waterfall([
     //
@@ -31,6 +31,7 @@ function parse(name, options, fn) {
     //
     function fetch(next) {
       if ('string' !== typeof name) return next(undefined, name);
+
       options.registry.packages.get(name, next);
     },
 
@@ -39,6 +40,7 @@ function parse(name, options, fn) {
     //
     function search(data, next) {
       if (!options.order.length) return next();
+      if (Array.isArray(data)) data = data[0];
 
       var parser, result, name;
 
