@@ -75,7 +75,8 @@ function parse(name, options, fn) {
         });
       }, function select() {
         return !result && options.order.length;
-      }, function done(err) {
+      }, function cleanup(err) {
+        options = null;
         next(err, result, name);
       });
     }
