@@ -29,12 +29,13 @@ module.exports = require('./parser').extend({
    */
   filenames: [
     'license',
+    'licence',
     'readme',
   ].concat([
     'markdown', 'mdown', 'md', 'textile', 'rdoc', 'org', 'creole', 'mediawiki',
     'rst', 'asciidoc', 'adoc', 'asc', 'pod'
   ].reduce(function flatten(slim, extension) {
-    slim.push('license.'+ extension, 'readme.'+ extension);
+    slim.push('license.'+ extension, 'readme.'+ extension, 'licence.'+ extension);
     return slim;
   }, [])),
 
@@ -87,6 +88,10 @@ module.exports = require('./parser').extend({
           return parser.filenames.some(function some(filename) {
             return !!~name.indexOf(filename);
           });
+        }).sort(function sort(a, b) {
+          if (a.name > b.name) return 1;
+          if (b.name < b.name) return -1;
+          return 0;
         });
 
         if (!files.length) return next();
