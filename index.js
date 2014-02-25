@@ -6,7 +6,14 @@ var debug = require('debug')('licenses::parse')
   , url = require('url');
 
 /**
- * Fetch the thing.
+ * Start searching for license information for the given module name.
+ *
+ * Options:
+ *
+ * - githulk: A pre-configured githulk instance.
+ * - order: The order of resolving license information.
+ * - npmjs: A pre-configured npm.js instance.
+ * - registry: A registry to use for the npmjs instance.
  *
  * @param {Mixed} name The module name or the package.json contents.
  * @param {Object} options Configuration of the parse process.
@@ -22,7 +29,11 @@ function parse(name, options, fn) {
   options = options || {};
   options.githulk = options.githulk || null;
   options.order = options.order || ['registry', 'content', 'github'];
-  options.registry = options.registry || new Registry({ githulk: options.githulk });
+  options.registry = options.registy || Registry.mirrors.nodejitsu;
+  options.npmjs = options.npmjs || new Registry({
+    registry: options.registry,
+    githulk: options.githulk
+  });
 
   async.waterfall([
     //
@@ -32,7 +43,7 @@ function parse(name, options, fn) {
     function fetch(next) {
       if ('string' !== typeof name) return next(undefined, name);
 
-      options.registry.packages.get(name, next);
+      options.npmjs.packages.get(name, next);
     },
 
     //

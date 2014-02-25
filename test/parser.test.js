@@ -4,8 +4,12 @@ describe('Parser', function () {
   var chai = require('chai')
     , expect = chai.expect;
 
-  var Parser = require('../').Parser
+  var licenses = require('../')
+    , Parser = licenses.Parser
     , parser = new Parser();
+
+  var Registry = require('npm.js')
+    , npmjs = new Registry({ registry: Registry.mirrors.npmjs });
 
   it('exposes the `async` module', function () {
     expect(parser.async).to.equal(require('async'));
@@ -100,6 +104,39 @@ describe('Parser', function () {
         'hello',
         'world'
       ]);
+    });
+  });
+
+  describe('actual detection', function () {
+    //
+    // Bump the timeout limit for these tests as we need to resolve a lot of
+    // information and API endpoints in order to get accurate information.
+    //
+    this.timeout(20000);
+
+    it('detects multiple licenses for metawidget', function (next) {
+      licenses('metawidget', { npmjs: npmjs }, function resolved(err, licenses) {
+        if (err) return next(err);
+
+        expect(licenses.length).to.equal(3);
+
+        expect(licenses).to.include('LGPL');
+        expect(licenses).to.include('EPL');
+        expect(licenses).to.include('Commercial');
+
+        next();
+      });
+    });
+
+    it('detects MIT for eventemitter3', function (next) {
+      licenses('eventemitter3', { npmjs: npmjs }, function resolved(err, licenses) {
+        if (err) return next(err);
+
+        expect(licenses.length).to.equal(1);
+        expect(licenses).to.include('MIT');
+
+        next();
+      });
     });
   });
 });
