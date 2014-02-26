@@ -1,9 +1,10 @@
 'use strict';
 
 var debug = require('debug')('licenses::parse')
-  , Registry = require('npm.js')
   , async = require('async')
   , url = require('url');
+
+var Registry;
 
 /**
  * Start searching for license information for the given module name.
@@ -25,6 +26,11 @@ function parse(name, options, fn) {
     fn = options;
     options = null;
   }
+
+  //
+  // Fix circular require.
+  //
+  if (!Registry) Registry = require('npm.js');
 
   options = options || {};
   options.githulk = options.githulk || null;
