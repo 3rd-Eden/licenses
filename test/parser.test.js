@@ -8,7 +8,7 @@ describe('Parser', function () {
     , Parser = licenses.Parser
     , parser = new Parser();
 
-  var Registry = require('npm.js')
+  var Registry = require('npm-registry')
     , npmjs = new Registry({ registry: Registry.mirrors.npmjs });
 
   it('exposes the `async` module', function () {

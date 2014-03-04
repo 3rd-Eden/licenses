@@ -13,7 +13,7 @@ var Registry;
  *
  * - githulk: A pre-configured githulk instance.
  * - order: The order of resolving license information.
- * - npmjs: A pre-configured npm.js instance.
+ * - npmjs: A pre-configured npm-registry instance.
  * - registry: A registry to use for the npmjs instance.
  *
  * @param {Mixed} name The module name or the package.json contents.
@@ -30,7 +30,7 @@ function parse(name, options, fn) {
   //
   // Fix circular require.
   //
-  if (!Registry) Registry = require('npm.js');
+  if (!Registry) Registry = require('npm-registry');
 
   options = options || {};
   options.githulk = options.githulk || null;
