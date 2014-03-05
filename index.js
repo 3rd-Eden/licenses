@@ -72,11 +72,11 @@ function parse(name, options, fn) {
         debug('attempting to extract the license information using: %s', name);
 
         parser.parse(data, options, function parsed(err, license) {
-          if (err) return next(err);
+          if (err) return next();
 
           result = license;
-
           if (result) debug('parsing with %s was successful', name);
+
           next();
         });
       }, function select() {
