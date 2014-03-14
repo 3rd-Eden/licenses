@@ -57,6 +57,11 @@ module.exports = require('./parser').extend({
     if ('string' === typeof data && data) return data;
     if ('type' in data && data.type) return data.type;
 
+    //
+    // Common typo's
+    //
+    if ('type:' in data && data['type:']) return data['type:'];
+
     return;
   },
 
