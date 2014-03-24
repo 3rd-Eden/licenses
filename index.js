@@ -36,8 +36,10 @@ function parse(name, options, fn) {
   options.githulk = options.githulk || null;
   options.order = options.order || ['registry', 'github', 'content'];
   options.registry = options.registy || Registry.mirrors.nodejitsu;
-  options.npmjs = options.npmjs || new Registry({
-    registry: options.registry,
+  options.npmjs = options.registry instanceof Registry
+    ? options.registry
+    : new Registry({
+    registry: options.registry || Registry.mirrors.nodejitsu,
     githulk: options.githulk
   });
 
