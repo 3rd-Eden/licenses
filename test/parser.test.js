@@ -47,6 +47,10 @@ describe('Parser', function () {
       expect(parser.dual(['MITandGPL']).join(':')).to.equal('MITandGPL');
       expect(parser.dual(['MITorGPL']).join(':')).to.equal('MITorGPL');
     });
+
+    it('does not dual parse as dual license if it can be normalized', function () {
+      expect(parser.dual(['Apache, Version 2.0']).join(':')).to.equal('Apache, Version 2.0');
+    });
   });
 
   describe('#url', function () {
