@@ -138,7 +138,17 @@ Parser.readable('dual', function dual(licenses) {
 
   return licenses.reduce(function reduce(licenses, license) {
     license = (license || '').trim();
-    if (!license) return;
+    if (!license) return licenses;
+
+    //
+    // Edge case, it's possible that people use Apache, Version 2.0 as licensing
+    // we don't want to split this as a dual license as it's License name,
+    // Version notation. We add these edge-cases directly in to our normalizer.
+    //
+    if (license in normalized) {
+      licenses.push(license);
+      return licenses;
+    }
 
     Array.prototype.push.apply(
       licenses,
