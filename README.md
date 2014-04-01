@@ -43,7 +43,18 @@ The module is released through npm and can therefor be installed using:
 npm install --save licenses
 ```
 
-## Getting started
+## CLI
+
+There is CLI version of this module available as `licensing` which can be
+installed locally using:
+
+```
+npm install -g licensing
+```
+
+See https://github.com/3rd-Eden/licensing for more information.
+
+## Getting started with the API
 
 The module exposes one single interface for retrieving the packages, which is a
 simple exported function:
