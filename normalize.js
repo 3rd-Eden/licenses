@@ -1,45 +1,7 @@
 'use strict';
 
-var license = {
-  AFL2: 'AFL 2.1',
-  AFL3: 'AFL 3.0',
-  AGPL3: 'AGPL 3.0',
-  CCBY: 'CC 3.0 BY',
-  CCBYND: 'CC 3.0 BY-ND',
-  CCBYSA: 'CC 3.0 BY-SA',
-  CCBYNC: 'CC 3.0 BY-NC',
-  CCBYNDSA: 'CC 3.0 BY-ND-SA',
-  CCBYNCSA: 'CC 3.0 BY-NC-SA',
-  CCBYNCND: 'CC 3.0 BY-NC-ND',
-  APL1: 'APL 1.0',
-  ARTISTIC2: 'Artistic 2.0',
-  Apache2: 'Apache 2.0',
-  Apache: 'Apache',
-  BEER: 'Beerware',
-  BSD2: 'BSD 2-Clause',
-  BSD3: 'BSD 3-Clause',
-  BSD: 'BSD 4-Clause',
-  BSL1: 'BSL 1.0',
-  CDDL1: 'CDDL 1.0',
-  GPL2: 'GPL 2.0',
-  GPL3: 'GPL 3.0',
-  GPL: 'GPL',
-  ISC: 'ISC',
-  JSON: 'JSON.org',
-  LGPL2: 'LGPL 2.1',
-  LGPL3: 'LGPL 3.0',
-  LGPL: 'LGPL',
-  MIT: 'MIT',
-  MPL2: 'MPL 2.0',
-  MPL: 'MPL 1.0',
-  NASA1: 'NASA 1.3',
-  PROPRIETARY: 'Proprietary',
-  PSF: 'Python 2.0',
-  PUBLIC: 'Public Domain',
-  UNLICENSE: 'Unlicense',
-  WTFPL: 'WTFPL',
-  ZLIB: 'zlib/libpng',
-};
+var opensource = require('./opensource')
+  , license = opensource.types;
 
 //
 // Map commonly used terms to a normal license value as you can usually specify
@@ -108,8 +70,8 @@ var normalized = {
   'Apache2.0': license.Apache2,
   'Appcelerator Proprietary and Confidential': license.PROPRIETARY,
   'Artistic-2.0': license.ARTISTIC2,
-  'Attribution-NonCommercial 2.5 Generic (CC BY-NC 2.5)': license.CCBYNC,
-  'Attribution-ShareAlike 3.0 Unported': license.CCBYSA,
+  'Attribution-NonCommercial 2.5 Generic (CC BY-NC 2.5)': license.CCBYNC25,
+  'Attribution-ShareAlike 3.0 Unported': license.CCBYSA3,
   'BOOST': license.BSL1,
   'BSD 2 Clause': license.BSD2,
   'BSD 2-Clause License': license.BSD2,
@@ -129,37 +91,37 @@ var normalized = {
   'BSD3': license.BSD3,
   'BeerWare': license.BEER,
   'Beerware': license.BEER,
-  'CC BY-NC 3.0': license.CCBYNC,
-  'CC BY-NC': license.CCBYNC,
-  'CC BY-NC-SA': license.CCBYNCSA,
-  'CC BY-SA 3.0': license.CCBYSA,
-  'CC BY-SA v3.0': license.CCBYSA,
-  'CC': license.CCBY,
-  'CC-0': license.CCBY,
-  'CC-BY 2.0': license.CCBY,
-  'CC-BY-NC-SA': license.CCBYNCSA,
-  'CC-BY-SA': license.CCBYSA,
-  'CC-By-SA 3.0': license.CCBYSA,
-  'CC-SA-BY-3.0': license.CCBYSA,
-  'CC-by-SA': license.CCBYSA,
-  'CC0 1.0': license.CCBY,
-  'CC3': license.CCBY,
-  'CC_by_3.0': license.CCBY,
+  'CC BY-NC 3.0': license.CCBYNC3,
+  'CC BY-NC': license.CCBYNC3,
+  'CC BY-NC-SA': license.CCBYNCSA3,
+  'CC BY-SA 3.0': license.CCBYSA3,
+  'CC BY-SA v3.0': license.CCBYSA3,
+  'CC': license.CCBY3,
+  'CC-0': license.CCBY3,
+  'CC-BY 2.0': license.CCBY25,
+  'CC-BY-NC-SA': license.CCBYNCSA3,
+  'CC-BY-SA': license.CCBYSA3,
+  'CC-By-SA 3.0': license.CCBYSA3,
+  'CC-SA-BY-3.0': license.CCBYSA3,
+  'CC-by-SA': license.CCBYSA3,
+  'CC0 1.0': license.CCBY3,
+  'CC3': license.CCBY3,
+  'CC_by_3.0': license.CCBY3,
   'CDDL': license.CDDL1,
   'Closed Source': license.PROPRIETARY,
-  'Copyrighted - CC BY-NC-ND': license.CCBYNCND,
-  'Creative Commons - Attribution 3.0': license.CCBY,
-  'Creative Commons 3.0': license.CCBY,
-  'Creative Commons Attribution 3.0 Unported License': license.CCBY,
-  'Creative Commons Attribution': license.CCBY,
-  'Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported (CC BY-NC-SA 3.0)': license.CCBYNCSA,
-  'Creative Commons Attribution-ShareAlike 3.0 Unported': license.CCBYSA,
-  'Creative Commons Attribution-ShareAlike 3.0': license.CCBYSA,
-  'Creative Commons BY-NC-SA License 3.0': license.CCBYNCSA,
-  'Creative Commons Legal Code Attribution-NonCommercial-NoDerivs 3.0': license.CCBYNCND,
-  'Creative Commons License 2.5': license.CCBY,
-  'Creative Commons attribution and share-alike license': license.CCBYSA,
-  'Creative Commons': license.CCBY,
+  'Copyrighted - CC BY-NC-ND': license.CCBYNCND3,
+  'Creative Commons - Attribution 3.0': license.CCBY3,
+  'Creative Commons 3.0': license.CCBY3,
+  'Creative Commons Attribution 3.0 Unported License': license.CCBY3,
+  'Creative Commons Attribution': license.CCBY3,
+  'Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported (CC BY-NC-SA 3.0)': license.CCBYNCSA3,
+  'Creative Commons Attribution-ShareAlike 3.0 Unported': license.CCBYSA3,
+  'Creative Commons Attribution-ShareAlike 3.0': license.CCBYSA3,
+  'Creative Commons BY-NC-SA License 3.0': license.CCBYNCSA3,
+  'Creative Commons Legal Code Attribution-NonCommercial-NoDerivs 3.0': license.CCBYNCND3,
+  'Creative Commons License 2.5': license.CCBY25,
+  'Creative Commons attribution and share-alike license': license.CCBYSA3,
+  'Creative Commons': license.CCBY3,
   'DO-WHAT-YOU-WANT': license.WTFPL,
   'DWTFYW': license.WTFPL,
   'Do What the Fuck You Want to Public License': license.WTFPL,
@@ -303,13 +265,13 @@ var normalized = {
   'apache2': license.Apache2,
   'apachev2': license.Apache2,
   'bsd': license.BSD,
-  'cc-by-sa': license.CCBYSA,
+  'cc-by-sa': license.CCBYSA3,
   'free': license.PUBLIC,
   'freeBSD': license.BSD3,
   'gnu': license.GPL,
   'gpl-3.0': license.GPL3,
   'gpl-v3.0': license.GPL3,
-  'http://creativecommons.org/licenses/by/3.0/': license.CCBY,
+  'http://creativecommons.org/licenses/by/3.0/': license.CCBY3,
   'http://opensource.org/licenses/MIT': license.MIT,
   'http://unlicense.org/': license.UNLICENSE,
   'http://wtfpl.org': license.WTFPL,
@@ -322,6 +284,8 @@ var normalized = {
   'new BSD': license.BSD3,
   'no': license.PUBLIC,
   'none': license.PUBLIC,
+  'nokia': license.NOKIA,
+  'nokos': license.NOKIA,
   'propriatry': license.PROPRIETARY,
   'proprietary': license.PROPRIETARY,
   'public domain': license.PUBLIC,
@@ -337,10 +301,44 @@ var normalized = {
 // normalized values for a higher hit rate.
 //
 Object.keys(normalized).map(function check(key) {
-  var uppercase = key.toUpperCase();
+  var uppercase = key.toUpperCase()
+    , lowercase = key.toLowerCase();
 
+  //
+  // This throw is here for development reasons. If we incorrectly referenced
+  // a license.id it will throw.
+  //
   if (!normalized[key]) throw new Error('Invalid reference for:'+ key);
+
   if (!normalized[uppercase]) normalized[uppercase] = normalized[key];
+  if (!normalized[lowercase]) normalized[lowercase] = normalized[key];
+});
+
+//
+// Also merge in all the data from our full license database.
+//
+opensource.full.forEach(function each(license) {
+  var name = license.name || ''
+    , full = license.full || ''
+    , url = license.url || ''
+    , id = license.id || '';
+
+  [
+    id,
+    id.toUpperCase(),
+    id.toLowerCase(),
+    url,
+    url.toUpperCase(),
+    url.toLowerCase(),
+    name,
+    name.toUpperCase(),
+    name.toLowerCase(),
+    full,
+    full.toUpperCase(),
+    full.toLowerCase()
+  ].forEach(function each(key) {
+    if (key && !normalized[key]) normalized[key] = license.name;
+  });
 });
 
 //

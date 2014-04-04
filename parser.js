@@ -217,13 +217,13 @@ Parser.readable('scan', function scan(str, percentage) {
 
   this.licenses.forEach(function each(license) {
     var test = {
-      total: license.file.length,
-      license: license.as,
+      total: license.content.length,
+      license: license.name,
       percentage: 0,
       matches: 0
     };
 
-    license.file.forEach(function each(line) {
+    license.content.forEach(function each(line) {
       if (str.indexOf(line) !== -1) test.matches++;
     });
 
@@ -246,35 +246,11 @@ Parser.readable('scan', function scan(str, percentage) {
  * @type {Array}
  * @api private
  */
-Parser.readable('licenses', [
-  { file: 'AFL2.1.txt',       as: 'AFL 2.1'       },
-  { file: 'AFL3.0.txt',       as: 'AFL 3.0'       },
-  { file: 'AGPL3.0.txt',      as: 'AGPL 3.0'      },
-  { file: 'APL-1.0.txt',      as: 'APL 1.0'       },
-  { file: 'Apache2.0.txt',    as: 'Apache 2.0'    },
-  { file: 'Artistic2.0.txt',  as: 'Artistic 2.0'  },
-  { file: 'BSD-2-Clause.txt', as: 'BSD 2-Clause'  },
-  { file: 'BSD-3-Clause.txt', as: 'BSD 3-Clause'  },
-  { file: 'BSD.txt',          as: 'BSD 4-Clouse'  },
-  { file: 'BSL1.0.txt',       as: 'BSL 1.0'       },
-  { file: 'EPL-1.0.txt',      as: 'EPL 1.0'       },
-  { file: 'GPL-2.0.txt',      as: 'GPL 2.0'       },
-  { file: 'GPL-3.0.txt',      as: 'GPL 3.0'       },
-  { file: 'ISC.txt',          as: 'ISC.txt'       },
-  { file: 'LGPL-2.1.txt',     as: 'LGPL 2.1'      },
-  { file: 'LGPL-3.0.txt',     as: 'LGPL 3.0'      },
-  { file: 'MIT.txt',          as: 'MIT'           },
-  { file: 'MPL-1.0.txt',      as: 'MPL'           },
-  { file: 'MPL-2.0.txt',      as: 'MPL 2.0'       },
-  { file: 'Python2.txt',      as: 'Python 2.0'    },
-  { file: 'UNLICENSE.txt',    as: 'UNLICENSE'     },
-  { file: 'WTFPL.txt',        as: 'WTFPL'         },
-  { file: 'beerware.txt',     as: 'Beerware'      },
-  { file: 'cddl1.txt',        as: 'CDDL 1.0'      },
-  { file: 'nasa.txt',         as: 'NASA 1.3'      },
-  { file: 'zlib.txt',         as: 'zlib/libpng'   }
-].map(function map(license) {
-  license.file = this.tokenizer(
+Parser.readable('licenses',
+  require('./opensource').full.filter(function filter(license) {
+    return !!license.file;
+  }).map(function map(license) {
+  license.content = this.tokenizer(
     fs.readFileSync(__dirname +'/licenses/'+ license.file, 'utf-8'),
     5
   );

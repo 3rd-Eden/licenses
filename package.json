@@ -27,6 +27,7 @@
     "mocha": "1.18.x",
     "chai": "1.9.x",
     "pre-commit": "0.0.x",
-    "argh": "0.1.x"
+    "argh": "0.1.x",
+    "request": "~2.34.0"
   }
 }
