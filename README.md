@@ -63,30 +63,69 @@ simple exported function:
 'use strict';
 
 var licenses = require('licenses');
-```
 
-The `licenses` function accepts the following arguments:
-
-- The name of a module or the contents of it's `package.json`. The module name
-  is preferred here as the registry contains more information about your package
-  than is available in the `package.json` that you write.
-- Options, this **optional** argument allows you to configure how the parsing
-  works:
-  - `registry` A valid npm registry endpoint, defaults to
-  `http://registry.nodejitsu.com`
-  - `order` The order of which we should attempt to detect licensing
-  information. Defaults to: `[npm, github, content]`.
-- And as last the callback function which receives an **optional** error or
-  undefined as first argument and an `Array` of licenses (as people can dual
-  license their code) or undefined.
-
-With this knowledge, we can simply start detecting licensing using:
-
-```js
 licenses('primus', function fetched(err, license) {
   console.log(license.join(',')); // MIT
 });
 ```
+
+As you can see in the example above, the first argument of the function can be a
+`string` with the name of the package you want to resolve. In addition to
+supplying a string you can also give it the contents of the npm registry's data
+directly:
+
+```js
+licenses({ name: 'primus', readme: '..', ....}, function fetched(err, license) {
+
+});
+```
+
+The function allows a second optional argument which allows you to configure
+license function. The following options are supported:
+
+- **githulk** A custom or pre-authorized
+  [githulk](https://github.com/3rd-Eden/githulk) instance. The license lookup
+  process makes extensive use of GitHub to retrieve license information that
+  might not be available in the package.json. But the GitHub API is rate limited
+  so if you don't use an authorized GitHulk instance you can only do 60 calls to
+  the API.
+- **order** The order in which we should attempt to resolve the license. This
+  defaults to [[registry](#registry), [github](#github), [content](#content)].
+- **registry** The URL of The npm Registry we should use to retrieve package
+  data.
+- *npmjs* a custom [npm-registry](https://github.com/3rd-Eden/npmjs) instance.
+
+The options are completely optional and can therefore be safely omitted.
+
+```js
+licenses('primus', { registry: 'https://registry.npmjs.org/' }, function () {
+
+});
+```
+
+As you might have noticed from the options we support three different lookup
+algorithms:
+
+### registry
+
+In this algorithm we attempt to search for license information directly in the
+supplied or retrieved npm data. This is the fastest lookup as it only needs to
+search and parse the `license` and `licenses` fields of the module for license
+information.
+
+### github
+
+This reads out your github repository information from the package data to get a
+directly listing of your project. Once the directory is listed it fetches files
+from the repo where a possible license or license information can be found like
+README and LICENSE files. All the data that is found will be scanned with the
+[content](#content) algorithm.
+
+### content
+
+It searches the readme or supplied content for matches the license files. If it
+fails to do any matching based on the license files it fallback to a really
+basic regexp based check.
 
 ### License
 

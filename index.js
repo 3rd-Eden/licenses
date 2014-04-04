@@ -1,6 +1,7 @@
 'use strict';
 
 var debug = require('debug')('licenses::parse')
+  , opensource = require('./opensource')
   , async = require('async')
   , url = require('url');
 
@@ -36,7 +37,7 @@ function parse(name, options, fn) {
   options.githulk = options.githulk || null;
   options.order = options.order || ['registry', 'github', 'content'];
   options.registry = options.registy || Registry.mirrors.nodejitsu;
-  options.npmjs = options.registry instanceof Registry
+  options.npmjs = 'string' !== typeof options.registry
     ? options.registry
     : new Registry({
     registry: options.registry || Registry.mirrors.nodejitsu,
@@ -90,6 +91,25 @@ function parse(name, options, fn) {
     }
   ], fn);
 }
+
+/**
+ * Retrieve addition license information based on the returned results. The
+ * returned object can contain the following properties
+ *
+ * - full: A human readable but long string of the license name.
+ * - name: The same name as you already provided.
+ * - id: An uppercase unique ID of the license.
+ *
+ * - file *optional*: The name of license file's content.
+ * - url *optional*: The location where people can read the terms.
+ *
+ * @param {String} name The name of the license.
+ * @returns {Object|Undefined}
+ * @api public
+ */
+parse.info = function info(name) {
+  return opensource.licenses[name];
+};
 
 //
 // Expose the Parser class so we easily add new parsers through third-party if
