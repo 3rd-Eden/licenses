@@ -1,4 +1,4 @@
-describe('Parser', function () {
+describe('opensource', function () {
   'use strict';
 
   var chai = require('chai')
