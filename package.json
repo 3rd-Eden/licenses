@@ -1,6 +1,6 @@
 {
   "name": "licenses",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "A small tool that detects licensing information for a given Node.js module",
   "main": "index.js",
   "scripts": {
