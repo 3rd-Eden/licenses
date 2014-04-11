@@ -34,6 +34,7 @@ exports.full = [
     name: 'AFL 3.0',
     full: 'Academic Free License 3.0',
     url: 'http://opensource.org/licenses/AFL-3.0',
+    tldr: 'https://tldrlegal.com/license/academic-free-license-3.0-(afl)',
     file: 'AFL3.0.txt'
   },
   {
@@ -41,6 +42,7 @@ exports.full = [
     name: 'AGPL 3.0',
     full: 'GNU Affero General Public License 3.0',
     url: 'http://opensource.org/licenses/AGPL-3.0',
+    tldr: 'https://tldrlegal.com/license/gnu-affero-general-public-license-v3-(agpl-3.0)',
     file: 'AGPL3.0.txt'
   },
   {
@@ -163,6 +165,7 @@ exports.full = [
     name: 'Artistic 2.0',
     full: 'Artistic license, Version 2.0',
     url: 'http://opensource.org/licenses/Artistic-2.0',
+    tldr: 'https://tldrlegal.com/license/artistic-license-2.0-(artistic)',
     file: 'Artistic2.0.txt'
   },
   {
@@ -170,6 +173,7 @@ exports.full = [
     name: 'Apache 2.0',
     full: 'Apache License, Version 2.0',
     url: 'http://opensource.org/licenses/Apache-2.0',
+    tldr: 'https://tldrlegal.com/license/apache-license-2.0-(apache-2.0)',
     file: 'Apache2.0.txt'
   },
   {
@@ -177,6 +181,7 @@ exports.full = [
     name: 'Apple 2.0',
     full: 'Apple Public Source License 2.0',
     url: 'http://opensource.org/licenses/APSL-2.0',
+    tldr: 'https://tldrlegal.com/license/apple-public-source-license-2.0-(apsl)',
     file: 'APSL-2.0.txt'
   },
   {
@@ -198,6 +203,7 @@ exports.full = [
     name: 'Beerware',
     full: 'BEER-WARE License',
     url: 'http://en.wikipedia.org/wiki/Beerware',
+    tldr: 'https://tldrlegal.com/license/beerware-license',
     file: 'beerware.txt'
   },
   {
@@ -205,6 +211,7 @@ exports.full = [
     name: 'BSD 2-Clause',
     full: 'BSD 2-Clause "Simplified" or "FreeBSD" License',
     url: 'http://opensource.org/licenses/BSD-2-Clause',
+    tldr: 'https://tldrlegal.com/license/bsd-2-clause-license-(freebsd)',
     file: 'BSD-2-Clause.txt'
   },
   {
@@ -212,6 +219,7 @@ exports.full = [
     name: 'BSD 3-Clause',
     full: 'BSD 3-Clause "New" or "Revised" License',
     url: 'http://opensource.org/licenses/BSD-3-Clause',
+    tldr: 'https://tldrlegal.com/license/bsd-3-clause-license-(revised)',
     file: 'BSD-3-Clause.txt'
   },
   {
@@ -226,6 +234,7 @@ exports.full = [
     name: 'BSL 1.0',
     full: 'Boost Software License',
     url: 'http://opensource.org/licenses/BSL-1.0',
+    tldr: 'https://tldrlegal.com/license/boost-software-license-1.0-explained',
     file: 'BSL1.0.txt'
   },
   {
@@ -247,6 +256,7 @@ exports.full = [
     name: 'CDDL 1.0',
     full: 'Common Development and Distribution License Version 1.0',
     url: 'http://opensource.org/licenses/CDDL-1.0',
+    tldr: 'https://tldrlegal.com/license/common-development-and-distribution-license-(cddl-1.0)-explained',
     file: 'cddl1.txt'
   },
   {
@@ -254,6 +264,7 @@ exports.full = [
     name: 'CPAL 1.0',
     full: 'Common Public Attribution License Version 1.0',
     url: 'http://opensource.org/licenses/CPAL-1.0',
+    tldr: 'https://tldrlegal.com/license/common-public-attribution-license-version-1.0-(cpal-1.0)',
     file: 'CPAL1.0.txt'
   },
   {
@@ -275,6 +286,7 @@ exports.full = [
     name: 'EPL 1.0',
     full: 'Eclipse Public License 1.0',
     url: 'http://opensource.org/licenses/EPL-1.0',
+    tldr: 'https://tldrlegal.com/license/eclipse-public-license-1.0-(epl-1.0)',
     file: 'EPL-1.0.txt'
   },
   {
@@ -303,6 +315,7 @@ exports.full = [
     name: 'EUPL 1.1',
     full: 'European Union Public License, version 1.1',
     url: 'https://joinup.ec.europa.eu/system/files/EN/EUPL%20v.1.1%20-%20Licence.pdf',
+    tldr: 'https://tldrlegal.com/license/european-union-public-licence',
     file: 'EUPL1.1.txt'
   },
   {
@@ -310,6 +323,7 @@ exports.full = [
     name: 'Fair',
     full: 'Fair License',
     url: 'http://opensource.org/licenses/Fair',
+    tldr: 'https://tldrlegal.com/license/fair-license',
     file: 'FAIR.txt'
   },
   {
@@ -324,6 +338,7 @@ exports.full = [
     name: 'GPL 2.0',
     full: 'GNU General Public License version 2.0',
     url: 'http://opensource.org/licenses/GPL-2.0',
+    tldr: 'https://tldrlegal.com/license/gnu-general-public-license-v2',
     file: 'GPL-2.0.txt'
   },
   {
@@ -331,6 +346,7 @@ exports.full = [
     name: 'GPL 3.0',
     full: 'GNU General Public License version 3.0',
     url: 'http://opensource.org/licenses/GPL-3.0',
+    tldr: 'https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)',
     file: 'GPL-3.0.txt'
   },
   {
@@ -345,6 +361,7 @@ exports.full = [
     name: 'ISC',
     full: 'ISC License',
     url: 'http://opensource.org/licenses/ISC',
+    tldr: 'https://tldrlegal.com/license/-isc-license',
     file: 'ISC.txt'
   },
   {
@@ -394,6 +411,7 @@ exports.full = [
     name: 'LGPL 2.1',
     full: 'GNU Library or "Lesser" General Public License version 2.1',
     url: 'http://opensource.org/licenses/LGPL-2.1',
+    tldr: 'https://tldrlegal.com/license/gnu-lesser-general-public-license-v2.1-(lgpl-2.1)',
     file: 'LGPL-2.1.txt'
   },
   {
@@ -422,6 +440,7 @@ exports.full = [
     name: 'IPL 1.0',
     full: 'IBM Public License Version 1.0',
     url: 'http://opensource.org/licenses/IPL-1.0',
+    tldr: 'https://tldrlegal.com/license/ibm-public-license-1.0-(ipl)',
     file: 'IPL-1.0.txt'
   },
   {
@@ -429,6 +448,7 @@ exports.full = [
     name: 'IPA',
     full: 'IPA Font License Agreement v1.0',
     url: 'http://opensource.org/licenses/IPA',
+    tldr: 'https://tldrlegal.com/license/ipa-font-license-(ipa)',
     file: 'IPA.txt'
   },
   {
@@ -436,6 +456,7 @@ exports.full = [
     name: 'MIT',
     full: 'The MIT License',
     url: 'http://opensource.org/licenses/MIT',
+    tldr: 'https://tldrlegal.com/license/mit-license',
     file: 'MIT.txt'
   },
   {
@@ -450,6 +471,7 @@ exports.full = [
     name: 'MPL 2.0',
     full: 'Mozilla Public License 2.0',
     url: 'http://opensource.org/licenses/MPL-2.0',
+    tldr: 'https://tldrlegal.com/license/mozilla-public-license-2.0-(mpl-2)',
     file: 'MPL-2.0.txt'
   },
   {
@@ -520,6 +542,7 @@ exports.full = [
     name: 'OFL 1.1',
     full: 'SIL Open Font License',
     url: 'http://opensource.org/licenses/OFL-1.1',
+    tldr: 'https://tldrlegal.com/license/open-font-license-(ofl)-explained',
     file: 'OFL-1.1.txt'
   },
   {
@@ -534,6 +557,7 @@ exports.full = [
     name: 'PHP 3.0',
     full: 'PHP License 3.0',
     url: 'http://opensource.org/licenses/PHP-3.0',
+    tldr: 'https://tldrlegal.com/license/php-license-3.0-(php)',
     file: 'PHP-3.0.txt'
   },
   {
@@ -553,6 +577,7 @@ exports.full = [
     name: 'Python 2.0',
     full: 'Python Software Foundation License Version 2.0',
     url: 'http://opensource.org/licenses/Python-2.0',
+    tldr: 'https://tldrlegal.com/license/python-license-2.0',
     file: 'Python2.txt'
   },
   {
@@ -595,6 +620,7 @@ exports.full = [
     name: 'SimPL 2.0',
     full: 'Simple Public License 2.0',
     url: 'http://opensource.org/licenses/SimPL-2.0',
+    tldr: 'https://tldrlegal.com/license/simple-public-license-2.0-(simpl)',
     file: 'SIMPL-2.0.txt'
   },
   {
@@ -602,6 +628,7 @@ exports.full = [
     name: 'Sleepycat',
     full: 'Sleepycat License',
     url: 'http://opensource.org/licenses/Sleepycat',
+    tldr: 'https://tldrlegal.com/license/sleepycat-license',
     file: 'SLEEPYCAT.txt'
   },
   {
@@ -623,6 +650,7 @@ exports.full = [
     name: 'NCSA',
     full: 'The University of Illinois/NCSA Open Source License',
     url: 'http://opensource.org/licenses/NCSA',
+    tldr: 'https://tldrlegal.com/license/university-of-illinois---ncsa-open-source-license-(ncsa)',
     file: 'NCSA.txt'
   },
   {
@@ -677,6 +705,7 @@ exports.full = [
     name: 'WTFPL',
     full: 'Do What the Fuck You Want to Public License',
     url: 'http://www.wtfpl.net',
+    tldr: 'https://tldrlegal.com/license/do-wtf-you-want-to-public-license-v2-(wtfpl-2.0)',
     file: 'WTFPL.txt'
   },
   {
@@ -684,6 +713,7 @@ exports.full = [
     name: 'zlib/libpng',
     full: 'zlib/libpng License',
     url: 'http://opensource.org/licenses/Zlib',
+    tldr: 'https://tldrlegal.com/license/zlib-libpng-license-(zlib)',
     file: 'zlib.txt'
   }
 ].map(function each(license) {

@@ -67,6 +67,38 @@ describe('opensource', function () {
       });
     });
 
+    describe('tldr', function () {
+      var request = require('request');
+
+      opensource.full.filter(function filter(license) {
+        return !!license.tldr;
+      }).forEach(function each(license) {
+        it('has a valid license tldr for: '+ license.full, function (next) {
+          this.timeout(10000);
+
+          request({
+            uri: license.tldr,
+            followRedirect: false,
+            headers: {
+              'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+              'Accept-Encoding': 'gzip,deflate,sdch',
+              'Accept-Language': 'en-US,en;q=0.8',
+              'Cache-Control': 'no-cache',
+              'Connection': 'keep-alive',
+              'DNT': '1',
+              'Pragma': 'no-cache',
+              'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36'
+            }
+          }, function done(err, res, body) {
+            if (err) return next(err);
+            if (res.statusCode !== 200) return next(new Error('Invalid statusCode: '+ res.statusCode));
+
+            next();
+          });
+        });
+      });
+    });
+
     describe('file', function () {
       var path = require('path')
         , fs = require('fs');
