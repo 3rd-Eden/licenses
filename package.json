@@ -3,6 +3,10 @@
   "version": "0.0.19",
   "description": "A small tool that detects licensing information for a given Node.js module",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/3rd-Eden/licenses.git"
+  },
   "scripts": {
     "test": "mocha $(find test -name '*.test.js')"
   },
