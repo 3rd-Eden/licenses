@@ -1,28 +1,26 @@
 describe('opensource', function () {
   'use strict';
 
-  var chai = require('chai')
-    , expect = chai.expect;
-
   var opensource = require('../opensource')
     , Parser = require('../parser')
+    , assume = require('assume')
     , parser = new Parser();
 
   it('exposes the full license info as array', function () {
-    expect(opensource.full).to.be.a('array');
+    assume(opensource.full).to.be.a('array');
   });
 
   it('exposes the full license info as object', function () {
-    expect(opensource.licenses).to.be.a('object');
-    expect(Object.keys(opensource.licenses).length).to.equal(opensource.full.length);
+    assume(opensource.licenses).to.be.a('object');
+    assume(Object.keys(opensource.licenses).length).to.equal(opensource.full.length);
   });
 
   describe('license integrity', function () {
     it('has the required id, name, full fields', function () {
       opensource.full.forEach(function (license) {
         ['name', 'id', 'full'].forEach(function (field) {
-          expect(license).to.have.property(field);
-          expect(license[field].trim()).to.equal(license[field]);
+          assume(license).to.have.property(field);
+          assume(license[field].trim()).to.equal(license[field]);
         });
       });
     });
@@ -31,7 +29,7 @@ describe('opensource', function () {
       opensource.full.forEach(function (license) {
         var res = (new Function('var license = {}; return license.'+ license.id +' || "foo"'))();
 
-        expect(res).to.equal('foo');
+        assume(res).to.equal('foo');
       });
     });
 
@@ -109,7 +107,7 @@ describe('opensource', function () {
         var content = fs.readFileSync(path.join(__dirname, '../licenses/'+ license.file), 'utf-8');
 
         it(license.name +' can be found through its license file content', function () {
-          expect(parser.scan(content)[0]).to.equal(license.name);
+          assume(parser.scan(content)[0]).to.equal(license.name);
         });
       });
     });

@@ -8,7 +8,10 @@
     "url": "https://github.com/3rd-Eden/licenses.git"
   },
   "scripts": {
-    "test": "mocha $(find test -name '*.test.js')"
+    "test": "mocha --reporter spec --ui bdd test/*.test.js",
+    "watch": "mocha --watch --reporter spec --ui bdd test/*.test.js",
+    "coverage": "istanbul cover ./node_modules/.bin/_mocha -- --reporter spec --ui bdd test/*.test.js",
+    "test-travis": "istanbul cover node_modules/.bin/_mocha --report lcovonly -- --reporter spec --ui bdd test/*.test.js"
   },
   "keywords": [
     "licenses",
@@ -28,10 +31,11 @@
     "npm-registry": "0.1.x"
   },
   "devDependencies": {
-    "mocha": "1.18.x",
-    "chai": "1.9.x",
-    "pre-commit": "0.0.x",
     "argh": "0.1.x",
+    "assume": "0.0.x",
+    "istanbul": "0.3.x",
+    "mocha": "2.0.x",
+    "pre-commit": "0.0.x",
     "request": "2.34.x"
   }
 }
