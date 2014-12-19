@@ -4,3 +4,4 @@ node_modules
 test/failed.json
 test/results.json
 test.js
+coverage
