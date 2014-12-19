@@ -36,7 +36,7 @@ function parse(name, options, fn) {
   options = options || {};
   options.githulk = options.githulk || null;
   options.order = options.order || ['registry', 'github', 'content'];
-  options.registry = options.registy || Registry.mirrors.nodejitsu;
+  options.registry = options.registry || Registry.mirrors.nodejitsu;
   options.npmjs = 'string' !== typeof options.registry
     ? options.registry
     : new Registry({
