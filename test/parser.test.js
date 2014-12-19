@@ -13,8 +13,30 @@ describe('Parser', function () {
     assume(parser.async).to.equal(require('async'));
   });
 
+  it('can be constructed without new', function () {
+    assume(Parser()).is.instanceOf(Parser);
+  });
+
   describe('#test', function () {
-    it('provides basic checks of license fragments');
+    it('provides basic checks of license fragments', function () {
+      var MIT = parser.test(['The module is licensed under MIT'].join('\n'))[0]
+        , GLP = parser.test(['The module is licensed under GPLv3'].join('\n'))[0]
+        , LGPL = parser.test(['The module is licensed under LGPL'].join('\n'))[0]
+        , BSD = parser.test(['The module is licensed under BSD'].join('\n'))[0]
+        , APA = parser.test(['The module is licensed under Apache License'].join('\n'))[0]
+        , MPL = parser.test(['The module is licensed under MPL'].join('\n'))[0]
+        , WTFPL = parser.test(['The module is licensed under WTFPL'].join('\n'))[0]
+        , WTFPLL = parser.test(['The module is licensed under DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE'].join('\n'))[0];
+
+      assume(MIT).equals('MIT');
+      assume(GLP).equals('GPL');
+      assume(LGPL).equals('LGPL');
+      assume(BSD).equals('BSD');
+      assume(APA).equals('Apache');
+      assume(MPL).equals('MPL');
+      assume(WTFPL).equals('WTFPL');
+      assume(WTFPLL).equals('WTFPL');
+    });
   });
 
   describe('#dual', function () {

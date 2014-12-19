@@ -40,11 +40,12 @@ Parser.readable('async', require('async'));
  */
 Parser.readable('test', function test(str) {
   if (/BSD/.test(str)) return ['BSD'];
-  if (/GPL/.test(str) || /GPLv2/.test(str)) return ['GPL'];
   if (/LGPL/.test(str)) return ['LGPL'];
+  if (/GPL/.test(str) || /GPLv2/.test(str)) return ['GPL'];
   if (/MIT/.test(str) || /\(MIT\)/.test(str)) return ['MIT'];
   if (/Apache\s?Licen[cs]e/.test(str)) return ['Apache'];
   if (/MPL/.test(str)) return ['MPL'];
+  if (/WTFPL/.test(str)) return ['WTFPL'];
 
   //
   // Watch out we've got a bad-ass over here.
