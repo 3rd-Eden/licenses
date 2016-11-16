@@ -25,18 +25,18 @@
   "author": "Arnout Kazemier",
   "license": "MIT",
   "dependencies": {
-    "async": "0.6.x",
-    "debug": "0.8.x",
-    "fusing": "0.2.x",
-    "githulk": "0.0.x",
+    "async": "~2.1.2",
+    "debug": "~2.3.2",
+    "fusing": "~1.0.0",
+    "githulk": "~1.1.2",
     "npm-registry": "0.1.x"
   },
   "devDependencies": {
     "argh": "0.1.x",
-    "assume": "0.0.x",
-    "istanbul": "0.3.x",
-    "mocha": "2.0.x",
-    "pre-commit": "0.0.x",
-    "request": "2.34.x"
+    "assume": "~1.4.1",
+    "istanbul": "~0.4.5",
+    "mocha": "~3.1.2",
+    "pre-commit": "~1.1.3",
+    "request": "~2.78.0"
   }
 }
