@@ -37,6 +37,6 @@
     "istanbul": "0.3.x",
     "mocha": "2.0.x",
     "pre-commit": "0.0.x",
-    "request": "2.34.x"
+    "request": "2.88.x"
   }
 }
